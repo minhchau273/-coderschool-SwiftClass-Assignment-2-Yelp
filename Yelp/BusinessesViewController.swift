@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate, GMSMapViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -46,6 +46,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             self.totalResult = result.total!
             self.businesses = result.businesses
             self.tableView.reloadData()
+            self.createMarkers()
             
 //            for business in self.businesses {
 //                println(business.name!)
@@ -58,19 +59,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         searchBar.delegate = self
         self.navigationController?.navigationBar.addSubview(searchBar)
         
+        mapView.delegate = self
         mapView.hidden = true
 
 
         
-        var camera = GMSCameraPosition.cameraWithLatitude(-33.86, longitude: 151.20, zoom: 6)
-        mapView.camera = camera
-        mapView.myLocationEnabled = true
         
-        var marker = GMSMarker()
-        marker.position = CLLocationCoordinate2DMake(37.785771, 151.20)
-        marker.title = "Sydney"
-        marker.snippet = "Australia"
-        marker.map = mapView
         
     }
     
@@ -200,6 +194,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             self.businesses = result.businesses
             self.tableView.reloadData()
             self.setTableViewVisible()
+            self.createMarkers()
             // println("total: \(result.total)")
             
             // Scroll to the top of table view
@@ -292,6 +287,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
             }
             self.tableView.reloadData()
+            self.createMarkers()
             println("total: \(result.total)")
             self.setTableViewVisible()
         }
@@ -312,9 +308,93 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             
             mapButton.image = UIImage(named: "Map")
         }
-        
-        
     }
     
+    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
+        
+        var infoWindow = NSBundle.mainBundle().loadNibNamed("InfoWindow", owner: self, options: nil).first! as! CustomInfoWindow
+        
+        infoWindow.layer.cornerRadius = 5
+        infoWindow.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
+        infoWindow.layer.borderWidth = 1
+        
+        var (business, index) = getBusinessFromMarker(marker)
+        if business != nil {
+            infoWindow.nameLabel.text = String(index) + ". " + business!.name!
+            infoWindow.distanceLabel.text = business!.distance
+            infoWindow.reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
+            infoWindow.addressLabel.text = business!.address!
+            infoWindow.categoriesLabel.text = business!.categories!
+            infoWindow.ratingImageView.setImageWithURL(business!.ratingImageURL)
+        }
+        
+        return infoWindow
+    }
+    
+    func createMarkers() {
+        // Clear all markers before creating new ones
+        mapView.clear()
+        
+        if businesses.count > 0 {
+            var camera = GMSCameraPosition.cameraWithLatitude(businesses[0].latitude!, longitude: businesses[0].longitude!, zoom: 15)
+            mapView.camera = camera
+            mapView.myLocationEnabled = true
+            
+            // Create maker for each business
+            for i in 0..<businesses!.count {
+                var marker = GMSMarker()
+                marker.position = CLLocationCoordinate2DMake(businesses[i].latitude!, businesses[i].longitude!)
+                marker.icon = createMarkerIcon(i + 1)
+                marker.map = mapView
+            }
+        }
+    }
+    
+    
+    func createMarkerIcon(no: Int) -> UIImage {
+        var markerView = UIView(frame:CGRectMake(0, 0, 50, 50))
+        
+        //Add icon
+        var icon = UIImageView(frame: CGRectMake(0, 0, 50, 50))
+        icon.image = UIImage(named: "Marker")
+        markerView.addSubview(icon)
+        
+        //Add Label
+        var noLabel = UILabel(frame: CGRectMake(0, 8, 50, 30))
+        noLabel.text = String(no)
+        noLabel.textAlignment = NSTextAlignment.Center
+        noLabel.textColor = UIColor.whiteColor()
+        markerView.addSubview(noLabel)
+        
+        return imageFromView(markerView)
+    }
+    
+    func imageFromView(aView:UIView) -> UIImage {
+        if(UIScreen.mainScreen().respondsToSelector("scale")) {
+            UIGraphicsBeginImageContextWithOptions(aView.frame.size, false, UIScreen.mainScreen().scale)
+        }
+        else {
+            UIGraphicsBeginImageContext(aView.frame.size)
+        }
+        aView.layer.renderInContext(UIGraphicsGetCurrentContext())
+        var image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+    
+    func getBusinessFromMarker(marker: GMSMarker) -> (Business?, Int) {
+        var latitude = Double(marker.position.latitude)
+        var longitude = Double(marker.position.longitude)
+        
+        for i in 0..<businesses!.count {
+            let businessLatitude = businesses[i].latitude as Double!
+            let businessLongitude = businesses[i].longitude as Double!
+            if businessLatitude == latitude && businessLongitude == longitude {
+                return (businesses[i], i + 1)
+            }
+        }
+        
+        return (nil, -1)
+    }
 
 }

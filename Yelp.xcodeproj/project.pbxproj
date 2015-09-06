@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		186293C61B9C69EB0068BD9E /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186293C51B9C69EB0068BD9E /* InfoWindow.xib */; };
+		186293C81B9C6A080068BD9E /* CustomInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186293C71B9C6A080068BD9E /* CustomInfoWindow.swift */; };
 		18642D571B9BDD34001E826D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18642D561B9BDD34001E826D /* DetailViewController.swift */; };
 		186724621B9A81BC00DD79B0 /* SeeAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186724611B9A81BC00DD79B0 /* SeeAllCell.swift */; };
 		186724641B9AEA4800DD79B0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186724631B9AEA4800DD79B0 /* Result.swift */; };
@@ -36,6 +38,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		186293BB1B9C5D930068BD9E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		186293C51B9C69EB0068BD9E /* InfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindow.xib; sourceTree = "<group>"; };
+		186293C71B9C6A080068BD9E /* CustomInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInfoWindow.swift; sourceTree = "<group>"; };
 		18642D561B9BDD34001E826D /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		186724611B9A81BC00DD79B0 /* SeeAllCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeeAllCell.swift; sourceTree = "<group>"; };
 		186724631B9AEA4800DD79B0 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -174,6 +179,8 @@
 				189C7FF51B968C96002A36D6 /* BusinessCell.swift */,
 				18B1FAB71B9989B2005CA7F7 /* DropDownCell.swift */,
 				186724611B9A81BC00DD79B0 /* SeeAllCell.swift */,
+				186293C51B9C69EB0068BD9E /* InfoWindow.xib */,
+				186293C71B9C6A080068BD9E /* CustomInfoWindow.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -181,6 +188,7 @@
 		BFED8AEEF0408368DCEBBA47 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				186293BB1B9C5D930068BD9E /* MapKit.framework */,
 				B0653E5EA62D8934863FF23A /* Pods_Yelp.framework */,
 			);
 			name = Frameworks;
@@ -282,6 +290,7 @@
 				189C7FD71B968900002A36D6 /* Main.storyboard in Resources */,
 				189C7FDC1B968900002A36D6 /* LaunchScreen.xib in Resources */,
 				189C7FD91B968900002A36D6 /* Images.xcassets in Resources */,
+				186293C61B9C69EB0068BD9E /* InfoWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +360,7 @@
 				189C7FD21B968900002A36D6 /* AppDelegate.swift in Sources */,
 				18B1FAB81B9989B2005CA7F7 /* DropDownCell.swift in Sources */,
 				18642D571B9BDD34001E826D /* DetailViewController.swift in Sources */,
+				186293C81B9C6A080068BD9E /* CustomInfoWindow.swift in Sources */,
 				186D32651B97E13800D1333B /* FiltersViewController.swift in Sources */,
 				189C7FFA1B969019002A36D6 /* Business.swift in Sources */,
 				189C7FF61B968C96002A36D6 /* BusinessCell.swift in Sources */,

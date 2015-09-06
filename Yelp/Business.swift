@@ -19,6 +19,8 @@ class Business: NSObject {
     let displayAddress: String?
     let status: String?
     let phone: String?
+    let latitude: Double?
+    let longitude: Double?
     
     
     init(dictonary: NSDictionary) {
@@ -34,6 +36,8 @@ class Business: NSObject {
         let location = dictonary["location"] as? NSDictionary
         var address = ""
         var displayAddress = ""
+        var latitude = 0.0
+        var longitude = 0.0
         if location != nil {
             let addressArray = location!["address"] as? NSArray
             var street: String? = ""
@@ -49,6 +53,7 @@ class Business: NSObject {
                 address += neighborhoods![0] as! String
             }
             
+            // Get display address
             let displayAddressArray = location!["display_address"] as? NSArray
             if displayAddressArray != nil && displayAddressArray!.count > 0 {
                 for s in displayAddressArray! {
@@ -57,9 +62,15 @@ class Business: NSObject {
                 // Remove ", " at the end
                 displayAddress = displayAddress[0..<(count(displayAddress) - 2)]
             }
+            
+            // Get latitude and longitude
+            latitude = (location!.valueForKeyPath("coordinate.latitude") as? Double)!
+            longitude = (location!.valueForKeyPath("coordinate.longitude") as? Double)!
         }
         self.address = address
         self.displayAddress = displayAddress
+        self.latitude = latitude
+        self.longitude = longitude
         
         let categoriesArray = dictonary["categories"] as? [[String]]
         if categoriesArray != nil {
