@@ -17,7 +17,7 @@ class SwitchCell: UITableViewCell {
     
     @IBOutlet weak var switchLabel: UILabel!
     
-//    @IBOutlet weak var onSwitch: UISwitch!
+    @IBOutlet weak var switchView: UIView!
     
     var onSwitch: SevenSwitch!
     
@@ -26,7 +26,7 @@ class SwitchCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        onSwitch = SevenSwitch(frame: CGRect(x: 263, y: 5, width: 45, height: 25))
+        onSwitch = SevenSwitch(frame: CGRect(x: 5, y: 3, width: 45, height: 25))
         
         onSwitch.thumbTintColor = UIColor.whiteColor()
         onSwitch.activeColor =  UIColor.clearColor()
@@ -35,39 +35,10 @@ class SwitchCell: UITableViewCell {
         onSwitch.borderColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 1.0)
         onSwitch.shadowColor = UIColor(red: 100/255, green: 100/255, blue: 100/255, alpha: 1.0)
         
-        self.contentView.addSubview(onSwitch)
+        switchView.addSubview(onSwitch)
         
         onSwitch.addTarget(self, action: "switchValueChanged", forControlEvents: UIControlEvents.ValueChanged)
-        
-        
-        // Add constraints
-//        self.contentView.setTranslatesAutoresizingMaskIntoConstraints(false)
-//        onSwitch.setTranslatesAutoresizingMaskIntoConstraints(false)
-//        switchLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-//        
-//        var horizontalSpaceConstraint =
-//        NSLayoutConstraint(item: onSwitch.superview!,
-//            attribute: NSLayoutAttribute.Trailing,
-//            relatedBy: NSLayoutRelation.Equal,
-//            toItem: onSwitch,
-//            attribute: NSLayoutAttribute.Trailing,
-//            multiplier: 1.0,
-//            constant: 38)
-//        
-//        var centerYAlignmentConstraint =
-//        NSLayoutConstraint(item: onSwitch,
-//            attribute: NSLayoutAttribute.CenterY,
-//            relatedBy: NSLayoutRelation.Equal,
-//            toItem: switchLabel,
-//            attribute: NSLayoutAttribute.CenterY,
-//            multiplier: 1.0,
-//            constant: 0)
-//        
-//        self.contentView.addConstraint(horizontalSpaceConstraint)
-//        self.contentView.addConstraint(centerYAlignmentConstraint)
-        
-        
-        
+      
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

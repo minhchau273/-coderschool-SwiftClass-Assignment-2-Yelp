@@ -340,14 +340,25 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ggj-mK-3fE">
+                                                    <rect key="frame" x="262" y="10.5" width="50" height="31"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="50" id="hXg-hd-clk"/>
+                                                        <constraint firstAttribute="height" constant="31" id="uPS-9U-FOt"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="ggj-mK-3fE" secondAttribute="trailing" constant="8" id="6dk-Gv-AIU"/>
                                                 <constraint firstItem="eoe-BG-oFd" firstAttribute="leading" secondItem="661-1c-71z" secondAttribute="leading" constant="15" id="8x1-Pp-UrT"/>
                                                 <constraint firstAttribute="centerY" secondItem="eoe-BG-oFd" secondAttribute="centerY" id="XuF-dE-jN4"/>
+                                                <constraint firstItem="ggj-mK-3fE" firstAttribute="centerY" secondItem="eoe-BG-oFd" secondAttribute="centerY" constant="0.5" id="t0c-kJ-OqB"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="switchLabel" destination="eoe-BG-oFd" id="2Zb-e7-OlH"/>
+                                            <outlet property="switchView" destination="ggj-mK-3fE" id="d96-Jr-0Ef"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DropDownCell" id="vpr-jv-a2q" customClass="DropDownCell" customModule="Yelp" customModuleProvider="target">
