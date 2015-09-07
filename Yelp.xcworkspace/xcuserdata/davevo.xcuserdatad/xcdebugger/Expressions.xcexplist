@@ -15,6 +15,14 @@
          contextName = "Yelp.FiltersViewController.onSearchButton (Yelp.FiltersViewController)(Swift.AnyObject) -&gt; ():FiltersViewController.swift">
       </ContextState>
       <ContextState
+         contextName = "Yelp.BusinessesViewController.searchBarTextDidBeginEditing (Yelp.BusinessesViewController)(ObjectiveC.UISearchBar) -&gt; ():BusinessesViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "searchBar.subviews">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "Yelp.FiltersViewController.tableView (Yelp.FiltersViewController)(ObjectiveC.UITableView, heightForRowAtIndexPath : ObjectiveC.NSIndexPath) -&gt; CoreGraphics.CGFloat:FiltersViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -26,15 +34,23 @@
          contextName = "Yelp.BusinessesViewController.tableView (Yelp.BusinessesViewController)(ObjectiveC.UITableView, numberOfRowsInSection : Swift.Int) -&gt; Swift.Int:BusinessesViewController.swift">
       </ContextState>
       <ContextState
-         contextName = "Yelp.BusinessesViewController.searchBarTextDidBeginEditing (Yelp.BusinessesViewController)(ObjectiveC.UISearchBar) -&gt; ():BusinessesViewController.swift">
+         contextName = "Yelp.DetailViewController.(getDirection (Yelp.DetailViewController) -&gt; (Swift.Double, lng : Swift.Double) -&gt; Swift.Optional&lt;Swift.Array&lt;Swift.Double&gt;&gt;).(closure #1):DetailViewController.swift">
          <PersistentStrings>
             <PersistentString
-               value = "searchBar.subviews">
+               value = "sUrl">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
       <ContextState
          contextName = "Yelp.BusinessesViewController.viewDidLoad (Yelp.BusinessesViewController)() -&gt; ():BusinessesViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "function signature specialization &lt;Arg[3] = Dead, Arg[4] = Value Promoted from InOut&gt; of Yelp.DetailViewController.(getDirection (Yelp.DetailViewController) -&gt; (Swift.Double, lng : Swift.Double) -&gt; Swift.Optional&lt;Swift.Array&lt;Swift.Double&gt;&gt;).(closure #1):DetailViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "stepArray[0]">
+            </PersistentString>
+         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		186293C61B9C69EB0068BD9E /* InfoWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 186293C51B9C69EB0068BD9E /* InfoWindow.xib */; };
 		186293C81B9C6A080068BD9E /* CustomInfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186293C71B9C6A080068BD9E /* CustomInfoWindow.swift */; };
+		186293CA1B9CA9020068BD9E /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186293C91B9CA9020068BD9E /* Location.swift */; };
 		18642D571B9BDD34001E826D /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18642D561B9BDD34001E826D /* DetailViewController.swift */; };
 		186724621B9A81BC00DD79B0 /* SeeAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186724611B9A81BC00DD79B0 /* SeeAllCell.swift */; };
 		186724641B9AEA4800DD79B0 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186724631B9AEA4800DD79B0 /* Result.swift */; };
@@ -41,6 +42,7 @@
 		186293BB1B9C5D930068BD9E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		186293C51B9C69EB0068BD9E /* InfoWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoWindow.xib; sourceTree = "<group>"; };
 		186293C71B9C6A080068BD9E /* CustomInfoWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomInfoWindow.swift; sourceTree = "<group>"; };
+		186293C91B9CA9020068BD9E /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		18642D561B9BDD34001E826D /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		186724611B9A81BC00DD79B0 /* SeeAllCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeeAllCell.swift; sourceTree = "<group>"; };
 		186724631B9AEA4800DD79B0 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 			children = (
 				189C7FF91B969019002A36D6 /* Business.swift */,
 				186724631B9AEA4800DD79B0 /* Result.swift */,
+				186293C91B9CA9020068BD9E /* Location.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				18642D571B9BDD34001E826D /* DetailViewController.swift in Sources */,
 				186293C81B9C6A080068BD9E /* CustomInfoWindow.swift in Sources */,
 				186D32651B97E13800D1333B /* FiltersViewController.swift in Sources */,
+				186293CA1B9CA9020068BD9E /* Location.swift in Sources */,
 				189C7FFA1B969019002A36D6 /* Business.swift in Sources */,
 				189C7FF61B968C96002A36D6 /* BusinessCell.swift in Sources */,
 				186724641B9AEA4800DD79B0 /* Result.swift in Sources */,

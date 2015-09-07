@@ -228,7 +228,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         var titleLabel = UILabel(frame: CGRect(x: 15, y: 15, width: 320, height: 30))
         titleLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
         titleLabel.font = UIFont(name: "Helvetica", size: 15)
-//        titleLabel.textColor = UIColor.redColor()
         
         
         switch section {
@@ -244,9 +243,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         case 3:
             titleLabel.text = "Category"
             break
-//        case 4:
-//            titleLabel.text = "Dummy"
-//            break
+
         default:
             return nil
         }

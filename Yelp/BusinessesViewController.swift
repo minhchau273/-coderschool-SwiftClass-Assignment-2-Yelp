@@ -20,6 +20,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     @IBOutlet weak var mapView: GMSMapView!
     
     
+    
+    
     var totalResult = 0 as Int
     var businesses : [Business]!
     var searchBar = UISearchBar()
