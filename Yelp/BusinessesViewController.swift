@@ -343,33 +343,101 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
         
-        var infoWindow = NSBundle.mainBundle().loadNibNamed("InfoWindow", owner: self, options: nil).first! as! CustomInfoWindow
+//        var infoWindow = NSBundle.mainBundle().loadNibNamed("InfoWindow", owner: self, options: nil).first! as! CustomInfoWindow
+//        
+//        println("view height: \(infoWindow.windowView.frame.height)")
+//        
+//        infoWindow.layer.cornerRadius = 5
+//        infoWindow.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
+//        infoWindow.layer.borderWidth = 1
+//        
+//        var (business, index) = getBusinessFromMarker(marker)
+//        if business != nil {
+//            infoWindow.nameLabel.text = String(index + 1) + ". " + business!.name!
+//            infoWindow.distanceLabel.text = business!.distance
+//            infoWindow.reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
+//            infoWindow.addressLabel.text = business!.address!
+//            infoWindow.categoriesLabel.text = business!.categories!
+//            infoWindow.ratingImageView.setImageWithURL(business!.ratingImageURL)
+//        }
+//        
+//        infoWindow.nameLabel.numberOfLines = 0
+//        infoWindow.nameLabel.sizeToFit()
+//        
+//        var viewHeight = 72 + infoWindow.nameLabel.frame.height
+//        infoWindow.windowView.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
+//        
+//        
+//        println("view height: \(infoWindow.windowView.frame.height)")
+//        
+//        infoWindow.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
         
-        println("view height: \(infoWindow.windowView.frame.height)")
+        
+        
+        var (business, index) = getBusinessFromMarker(marker)
+        
+        // New info window view
+        var darkColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+        var lightColor = UIColor(red: 220/255, green: 140/255, blue: 140/255, alpha: 1.0)
+        
+        var infoWindow = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 90))
+        infoWindow.layer.backgroundColor = UIColor(red: 250/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
         
         infoWindow.layer.cornerRadius = 5
         infoWindow.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
         infoWindow.layer.borderWidth = 1
         
-        var (business, index) = getBusinessFromMarker(marker)
-        if business != nil {
-            infoWindow.nameLabel.text = String(index + 1) + ". " + business!.name!
-            infoWindow.distanceLabel.text = business!.distance
-            infoWindow.reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
-            infoWindow.addressLabel.text = business!.address!
-            infoWindow.categoriesLabel.text = business!.categories!
-            infoWindow.ratingImageView.setImageWithURL(business!.ratingImageURL)
-        }
+        var nameLabel = UILabel(frame: CGRect(x: 8, y: 8, width: 184, height: 18))
+        nameLabel.text = String(index + 1) + ". " + business!.name!
+        nameLabel.font = UIFont.boldSystemFontOfSize(14)
+        nameLabel.textColor = darkColor
+        nameLabel.numberOfLines = 0
+        nameLabel.sizeToFit()
+        infoWindow.addSubview(nameLabel)
         
-        infoWindow.nameLabel.numberOfLines = 0
-        infoWindow.nameLabel.sizeToFit()
+        var distanceLabel = UILabel(frame: CGRect(x: 200, y: 8, width: 42, height: 14))
+        distanceLabel.text = business!.distance
+        distanceLabel.font = UIFont.systemFontOfSize(12)
+        distanceLabel.textColor = lightColor
+        infoWindow.addSubview(distanceLabel)
         
+        var ratingY = nameLabel.bounds.origin.y + nameLabel.frame.height + 12
+        var ratingImageView = UIImageView(frame: CGRect(x: 8, y: ratingY, width: 83, height: 15))
+        ratingImageView.setImageWithURL(business!.ratingImageURL)
+        infoWindow.addSubview(ratingImageView)
         
+        var reviewsCountLabel = UILabel(frame: CGRect(x: 99, y: ratingY, width: 78, height: 14))
+        reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
+        reviewsCountLabel.font = UIFont.systemFontOfSize(12)
+        reviewsCountLabel.textColor = lightColor
+        infoWindow.addSubview(reviewsCountLabel)
         
+        var priceLabel = UILabel(frame: CGRect(x: 228, y: ratingY, width: 14, height: 14))
+        priceLabel.text = "$$"
+        priceLabel.font = UIFont.systemFontOfSize(12)
+        priceLabel.textColor = lightColor
+        infoWindow.addSubview(priceLabel)
         
-        println("view height: \(infoWindow.windowView.frame.height)")
+        var addressY = ratingY + ratingImageView.frame.height + 4
+        var addressLabel = UILabel(frame: CGRect(x: 8, y: addressY, width: 234, height: 14))
+        addressLabel.text = business!.address!
+        addressLabel.font = UIFont.systemFontOfSize(12)
+        addressLabel.textColor = darkColor
+        addressLabel.numberOfLines = 0
+        addressLabel.sizeToFit()
+        infoWindow.addSubview(addressLabel)
         
-//        infoWindow.frame = CGRect(x: 0, y: 0, width: 250, height: infoWindow.windowView.frame.height)
+        var categoriesY = addressY + addressLabel.frame.height + 4
+        var categoriesLabel = UILabel(frame: CGRect(x: 8, y: categoriesY, width: 234, height: 14))
+        categoriesLabel.text = business!.categories!
+        categoriesLabel.font = UIFont.systemFontOfSize(12)
+        categoriesLabel.textColor = lightColor
+        categoriesLabel.numberOfLines = 0
+        categoriesLabel.sizeToFit()
+        infoWindow.addSubview(categoriesLabel)
+        
+        var viewHeight = categoriesY + categoriesLabel.frame.height + 8
+        infoWindow.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
         
         return infoWindow
     }
