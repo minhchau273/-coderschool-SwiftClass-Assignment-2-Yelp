@@ -28,8 +28,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     var isRadiusCollapsed = true
     var isCategoryCollapsed = true
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +40,17 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         // (miles)
         radii = [nil, 0.3, 1, 5, 20]
         
+        getOldFilters()
+        
+        self.tableView.tableFooterView = UIView()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func getOldFilters() {
         
         // Get old states
         var switchStatesData = defaults.objectForKey("switchStates") as? NSData
@@ -57,24 +66,18 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         if filters["sort"] == nil {
             filters["sort"] = NSNumber(unsignedInteger: 0)
         }
-        
-        self.tableView.tableFooterView = UIView()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: Button
     
     @IBAction func onCancelButton(sender: AnyObject) {
+        
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func onSearchButton(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
         
+        dismissViewControllerAnimated(true, completion: nil)
         
         var selectedCategories = [String]()
         for (row, isSelected) in switchStates {
@@ -100,8 +103,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         defaults.synchronize()
     }
     
-    
-    
     // MARK: Table view
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -109,6 +110,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         switch section {
         case 0:
             return 1
@@ -128,6 +130,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         switch indexPath.section {
         case 0:
             // Deal area
@@ -156,7 +159,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 } else {
                     cell.label.text =  String(format: "%g", radii[indexPath.row]!) + " miles"
                 }
-                
             }
             
             setRadiusIcon(indexPath.row, iconView: cell.iconView)
@@ -182,7 +184,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 break
             default:
                 break
-                
             }
             
             setSortIcon(indexPath.row, iconView: cell.iconView)
@@ -215,6 +216,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
         case 4:
+            // Reset row
+            
             let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
             cell.label.text = "Reset filters"
             cell.label.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
@@ -251,7 +254,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         case 3:
             titleLabel.text = "Category"
             break
-
         default:
             return nil
         }
@@ -266,6 +268,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
         switch indexPath.section {
         case 1:
             if isRadiusCollapsed {
@@ -300,6 +303,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Radius area
     
     func setRadiusIcon(row: Int, iconView: UIImageView) {
+        
         let radiusValue = filters["radius"] as! Float?
         
         if radiusValue == radii[row] {
@@ -315,6 +319,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func setRadiusCellVisible(row: Int, cell: DropDownCell) {
+        
         let radiusValue = filters["radius"] as! Float?
         if isRadiusCollapsed && radii[row] != radiusValue {
             cell.label.hidden = true
@@ -329,6 +334,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Sort area
     
     func getSortValue() -> Int {
+        
         let sortValue = filters["sort"] as? Int
         
         if sortValue != nil {
@@ -339,6 +345,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func setSortIcon(row: Int, iconView: UIImageView) {
+        
         let sortValue = getSortValue()
         
         if sortValue == row {
@@ -354,6 +361,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func setSortCellVisible(row: Int, cell: DropDownCell) {
+        
         let sortValue = getSortValue()
         if isSortCollapsed && row != sortValue {
             cell.label.hidden = true
@@ -368,6 +376,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Category area
     
     func setCategoryCellVisible(row: Int, cell: SwitchCell) {
+        
         if isCategoryCollapsed && row > 2 && row != categories.count {
             cell.switchLabel.hidden = true
             cell.onSwitch.hidden = true
@@ -379,6 +388,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tapSeeAll(sender:UITapGestureRecognizer) {
+        
         // Get SeeAllCell
         let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: categories.count, inSection: 3)) as! SeeAllCell
         
@@ -396,6 +406,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Reset filters
     
     func tapReset(sender:UITapGestureRecognizer) {
+        
         filters["deal"] = false
         filters["radius"] = radii[0]
         filters["sort"] = 0
@@ -407,6 +418,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Implement delegate
     
     func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
+        
         let indexPath = tableView.indexPathForCell(switchCell)!
 
         if indexPath.section == 0 {
@@ -417,8 +429,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func selectCell(dropDownCell: DropDownCell, didSelect currentImg: UIImage) {
-        let indexPath = tableView.indexPathForCell(dropDownCell)
         
+        let indexPath = tableView.indexPathForCell(dropDownCell)
         
         if indexPath != nil {
             if indexPath!.section == 1 {
@@ -458,14 +470,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             tableView.reloadData()
         }
         
-        
-        
-        
     }
     
     // MARK: List of Categories
     
     func yelpCategories() -> [[String: String]] {
+        
         return [["name" : "Afghan", "code": "afghani"],
             ["name" : "African", "code": "african"],
             ["name" : "American, New", "code": "newamerican"],
@@ -637,8 +647,4 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             ["name" : "Yugoslav", "code": "yugoslav"]]
     }
 
-    
-    
-
-    
 }

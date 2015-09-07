@@ -10,6 +10,8 @@ import UIKit
 
 class CustomInfoWindow: UIView {
     
+    @IBOutlet weak var windowView: UIView!
+    
     @IBOutlet weak var nameLabel: UILabel!
     
     @IBOutlet weak var distanceLabel: UILabel!
@@ -22,8 +24,6 @@ class CustomInfoWindow: UIView {
     
     @IBOutlet weak var ratingImageView: UIImageView!
     
-    
-
     /*
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.

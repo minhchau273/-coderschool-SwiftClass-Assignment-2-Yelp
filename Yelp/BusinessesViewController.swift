@@ -19,14 +19,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBOutlet weak var mapView: GMSMapView!
     
-    
-    
-    
     var totalResult = 0 as Int
     var businesses : [Business]!
     var searchBar = UISearchBar()
     var keyword = "Restaurants"
     var filters = [String : AnyObject]()
+    var tableFooterView: UIView!
     var loadingView: UIActivityIndicatorView!
     var notificationLabel: UILabel!
     
@@ -41,19 +39,24 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.estimatedRowHeight = 120
         tableView.separatorColor = UIColor(red: 238/255, green: 180/255, blue: 180/255, alpha: 1)
         
-        
         addTableFooterView()
         
         Business.searchWithTerm(nil, completion: { (result: Result!, error: NSError!) -> Void in
-            self.totalResult = result.total!
-            self.businesses = result.businesses
-            self.tableView.reloadData()
-            self.createMarkers()
             
-//            for business in self.businesses {
-//                println(business.name!)
-//                println(business.address!)
-//            }
+            if result != nil {
+                self.totalResult = result.total!
+                self.businesses = result.businesses
+                self.tableView.reloadData()
+                self.createMarkers()
+                
+                //            for business in self.businesses {
+                //                println(business.name!)
+                //                println(business.address!)
+                //            }
+
+            } else {
+                self.totalResult = 0
+            }
             
             self.setTableViewVisible()
         })
@@ -63,20 +66,22 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         mapView.delegate = self
         mapView.hidden = true
-
-
-        
-        
         
     }
     
     override func viewDidLayoutSubviews() {
         // When rotate device
+        
+        // Change size of search bar
         var navBarHeight = self.navigationController?.navigationBar.frame.height
         var y = (navBarHeight! - 30) / 2
         let screenWidth = CGRectGetWidth(tableView.superview!.frame)
-        
         searchBar.frame = CGRect(x: 53, y: y, width: screenWidth - 100, height: 30)
+        
+        // Change size of the loading icon
+        tableFooterView.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
+        notificationLabel.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
+        loadingView.center = tableFooterView.center
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,7 +92,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: Table view
     
     func addTableFooterView() {
-        var tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50))
+        
+        tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50))
         println("width: \(tableFooterView.frame.width)")
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         loadingView.startAnimating()
@@ -104,16 +110,26 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func setTableViewVisible() {
+        
         if totalResult > 0 {
-            tableView.hidden = false
+            var buttonImg = mapButton.image
+            if buttonImg == UIImage(named: "Map") {
+                tableView.hidden = false
+                mapView.hidden = true
+            } else {
+                tableView.hidden = true
+                mapView.hidden = false
+            }
             noResultLabel.hidden = true
         } else {
             tableView.hidden = true
+            mapView.hidden = true
             noResultLabel.hidden = false
         }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         if businesses != nil {
             return businesses.count
         } else {
@@ -122,6 +138,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
         
         cell.business = businesses[indexPath.row]
@@ -138,7 +155,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                 loadingView.stopAnimating()
                 notificationLabel.hidden = false
             }
-            
         }
         
         // Set full width for the separator
@@ -146,15 +162,14 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsetsZero
         
-        
         return cell
     }
     
     // MARK: Transfer between 2 view controllers
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
         let navigationController = segue.destinationViewController as! UINavigationController
-//        let filtersViewController = navigationController.topViewController as! FiltersViewController
         
         if navigationController.topViewController is FiltersViewController {
             let filtersViewController = navigationController.topViewController as! FiltersViewController
@@ -167,11 +182,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             
             detailViewController.selectedBusiness = businesses[indexPath!.row]
         }
-        
-        
     }
     
     func filtersViewController(filFiltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+        
         // Get filters from FiltersViewController
         var term: String?
         if !searchBar.text.isEmpty {
@@ -192,15 +206,22 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.filters["radius"] = radius
         
         Business.searchWithTerm(term, sort: sortValue, categories: categories, deals: deal, radius: radius, offset: nil) { (result: Result!, error: NSError!) -> Void in
-            self.totalResult = result.total!
-            self.businesses = result.businesses
-            self.tableView.reloadData()
-            self.setTableViewVisible()
-            self.createMarkers()
-            // println("total: \(result.total)")
             
-            // Scroll to the top of table view
-            self.tableView.contentOffset = CGPointMake(0, 0 - self.tableView.contentInset.top)
+            if result != nil {
+                self.totalResult = result.total!
+                self.businesses = result.businesses
+                self.tableView.reloadData()
+                self.setTableViewVisible()
+                self.createMarkers()
+                // println("total: \(result.total)")
+                
+                // Scroll to the top of table view
+                self.tableView.contentOffset = CGPointMake(0, 0 - self.tableView.contentInset.top)
+            } else {
+                self.totalResult = 0
+            }
+            
+            self.setTableViewVisible()
         }
     }
     
@@ -211,6 +232,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        
         searchBar.enablesReturnKeyAutomatically = false
         searchBar.showsCancelButton = true
         
@@ -226,7 +248,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             searchBar.frame = CGRect(x: x, y: y, width: width + 50, height: height)
             }, completion: nil)
         
-        
         for view in searchBar.subviews {
             for subView in view.subviews {
                 if subView is UITextField {
@@ -235,10 +256,10 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                 }
             }
         }
-        
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+        
         searchBar.showsCancelButton = false
         
         let x = searchBar.frame.origin.x
@@ -252,15 +273,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         UIView.animateWithDuration(0.3, delay: 0.0, options: UIViewAnimationOptions.LayoutSubviews, animations: {
             searchBar.frame = CGRect(x: x, y: y, width: width - 50, height: height)
             }, completion: nil)
-
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        
         searchBar.text = ""
         searchBar.resignFirstResponder()
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        
         businesses.removeAll(keepCapacity: false)
         tableView.reloadData()
         searchBusisness()
@@ -268,6 +290,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func searchBusisness() {
+        
         var term: String?
         if !searchBar.text.isEmpty {
             term = searchBar.text
@@ -281,16 +304,21 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         Business.searchWithTerm(term, sort: sort, categories: categories, deals: deal, radius: radius, offset: offset) { (result: Result!, error: NSError!) -> Void in
             
-            self.totalResult = result.total!
-            
-            if offset < result.total {
-                for b in result.businesses {
-                    self.businesses.append(b)
+            if result != nil {
+                self.totalResult = result.total!
+                
+                if offset < result.total {
+                    for b in result.businesses {
+                        self.businesses.append(b)
+                    }
                 }
+                self.tableView.reloadData()
+                self.createMarkers()
+                //println("total: \(result.total)")
+            } else {
+                self.totalResult = 0
             }
-            self.tableView.reloadData()
-            self.createMarkers()
-            println("total: \(result.total)")
+            
             self.setTableViewVisible()
         }
     }
@@ -298,6 +326,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     // MARK: Google Map
     
     @IBAction func onMapButton(sender: AnyObject) {
+        
         var buttonImg = mapButton.image
         if buttonImg == UIImage(named: "Map") {
             tableView.hidden = true
@@ -316,13 +345,15 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         var infoWindow = NSBundle.mainBundle().loadNibNamed("InfoWindow", owner: self, options: nil).first! as! CustomInfoWindow
         
+        println("view height: \(infoWindow.windowView.frame.height)")
+        
         infoWindow.layer.cornerRadius = 5
         infoWindow.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
         infoWindow.layer.borderWidth = 1
         
         var (business, index) = getBusinessFromMarker(marker)
         if business != nil {
-            infoWindow.nameLabel.text = String(index) + ". " + business!.name!
+            infoWindow.nameLabel.text = String(index + 1) + ". " + business!.name!
             infoWindow.distanceLabel.text = business!.distance
             infoWindow.reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
             infoWindow.addressLabel.text = business!.address!
@@ -330,10 +361,31 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             infoWindow.ratingImageView.setImageWithURL(business!.ratingImageURL)
         }
         
+        infoWindow.nameLabel.numberOfLines = 0
+        infoWindow.nameLabel.sizeToFit()
+        
+        
+        
+        
+        println("view height: \(infoWindow.windowView.frame.height)")
+        
+//        infoWindow.frame = CGRect(x: 0, y: 0, width: 250, height: infoWindow.windowView.frame.height)
+        
         return infoWindow
     }
     
+    func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
+        
+        var dvc = self.storyboard?.instantiateViewControllerWithIdentifier("DetailNavC") as! DetailViewController
+        var nc = UINavigationController(rootViewController: dvc)
+        
+        var (business, index) = getBusinessFromMarker(marker)
+        dvc.selectedBusiness = business
+        self.presentViewController(nc, animated: true, completion: nil)
+    }
+    
     func createMarkers() {
+        
         // Clear all markers before creating new ones
         mapView.clear()
         
@@ -352,8 +404,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    
     func createMarkerIcon(no: Int) -> UIImage {
+        
         var markerView = UIView(frame:CGRectMake(0, 0, 50, 50))
         
         //Add icon
@@ -372,6 +424,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func imageFromView(aView:UIView) -> UIImage {
+        
         if(UIScreen.mainScreen().respondsToSelector("scale")) {
             UIGraphicsBeginImageContextWithOptions(aView.frame.size, false, UIScreen.mainScreen().scale)
         }
@@ -385,6 +438,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func getBusinessFromMarker(marker: GMSMarker) -> (Business?, Int) {
+        
         var latitude = Double(marker.position.latitude)
         var longitude = Double(marker.position.longitude)
         
@@ -392,7 +446,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             let businessLatitude = businesses[i].latitude as Double!
             let businessLongitude = businesses[i].longitude as Double!
             if businessLatitude == latitude && businessLongitude == longitude {
-                return (businesses[i], i + 1)
+                return (businesses[i], i)
             }
         }
         

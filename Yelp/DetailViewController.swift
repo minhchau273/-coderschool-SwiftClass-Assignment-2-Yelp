@@ -33,7 +33,6 @@ class DetailViewController: UIViewController {
     
     @IBOutlet weak var getDirectionView: UIView!
     
-
     var selectedBusiness: Business!
     
     var destLocationArray = [Location]()
@@ -127,7 +126,7 @@ class DetailViewController: UIViewController {
                 var desLat = step.valueForKeyPath("end_location.lat") as! Double
                 var desLng = step.valueForKeyPath("end_location.lng") as! Double
                 self.destLocationArray.append(Location(lat: desLat, lng: desLng))
-                println("lat: \(desLat), lng: \(desLng)")
+                //println("lat: \(desLat), lng: \(desLng)")
             }
         }
     }

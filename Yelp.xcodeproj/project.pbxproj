@@ -116,7 +116,6 @@
 				189C7FD11B968900002A36D6 /* AppDelegate.swift */,
 				189C7FD51B968900002A36D6 /* Main.storyboard */,
 				189C7FD81B968900002A36D6 /* Images.xcassets */,
-				189C7FDA1B968900002A36D6 /* LaunchScreen.xib */,
 				189C7FCF1B968900002A36D6 /* Supporting Files */,
 			);
 			path = Yelp;
@@ -125,6 +124,7 @@
 		189C7FCF1B968900002A36D6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				189C7FDA1B968900002A36D6 /* LaunchScreen.xib */,
 				189C7FD01B968900002A36D6 /* Info.plist */,
 			);
 			name = "Supporting Files";
