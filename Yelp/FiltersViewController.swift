@@ -105,7 +105,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     // MARK: Table view
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -118,6 +118,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             return 3
         case 3:
             return categories.count + 1
+        case 4:
+            return 1
         default:
             break
         }
@@ -212,12 +214,19 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 return cell
             }
             
+        case 4:
+            let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
+            cell.label.text = "Reset filters"
+            cell.label.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+            let tapResetCell = UITapGestureRecognizer(target: self, action: "tapReset:")
+            cell.addGestureRecognizer(tapResetCell)
+            
+            return cell
+            
         default:
             let cell = UITableViewCell()
             return cell
         }
-        
-
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -228,7 +237,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         var titleLabel = UILabel(frame: CGRect(x: 15, y: 15, width: 320, height: 30))
         titleLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
         titleLabel.font = UIFont(name: "Helvetica", size: 15)
-        
         
         switch section {
         case 0:
@@ -381,6 +389,17 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.label.text = "See All"
             isCategoryCollapsed = true
         }
+        
+        tableView.reloadData()
+    }
+    
+    // MARK: Reset filters
+    
+    func tapReset(sender:UITapGestureRecognizer) {
+        filters["deal"] = false
+        filters["radius"] = radii[0]
+        filters["sort"] = 0
+        switchStates.removeAll(keepCapacity: false)
         
         tableView.reloadData()
     }

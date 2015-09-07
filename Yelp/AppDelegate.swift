@@ -19,15 +19,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+        // Config apprearance
         UINavigationBar.appearance().barTintColor = UIColor(red: 213/255, green: 28/255, blue: 24/255, alpha: 1.0)
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
         
         UIApplication.sharedApplication().statusBarStyle = .LightContent
         
+        // Clear old filters
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("filters")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("switchStates")
+        
         // Google Map
         GMSServices.provideAPIKey(googleMapsApiKey)
-        
         
         return true
     }
