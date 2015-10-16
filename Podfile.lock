@@ -24,18 +24,29 @@ PODS:
     - AFNetworking/NSURLConnection (~> 2.5.0)
     - AFNetworking/NSURLSession (~> 2.5.0)
   - GoogleMaps (1.10.2)
+  - KIF (3.3.0):
+    - KIF/Core (= 3.3.0)
+  - KIF/Core (3.3.0)
+  - Nimble (1.0.0)
+  - Quick (0.3.1)
   - SevenSwitch (2.0.0)
 
 DEPENDENCIES:
   - AFNetworking
   - BDBOAuth1Manager
   - GoogleMaps
+  - KIF (~> 3.0)
+  - Nimble (~> 1.0.0)
+  - Quick (~> 0.3.1)
   - SevenSwitch
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   BDBOAuth1Manager: 2e28773b58f880fb36b5cd3efcf0b1fefbc78a99
   GoogleMaps: 5c92e599b07b0a2a9b367c5dd128edc629bddfea
+  KIF: 0a82046d06f3648799cac522d2d0f7934214caac
+  Nimble: 8bee528e5fcc403653076545db562d2b5db7bb87
+  Quick: 824572d3d198d51e52cf4aa722cebf7e59952a35
   SevenSwitch: 4ae92ffcad0ef93b38553b39a25e753c94eb7847
 
 COCOAPODS: 0.38.2
