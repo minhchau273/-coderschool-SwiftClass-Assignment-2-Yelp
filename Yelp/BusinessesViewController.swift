@@ -38,6 +38,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         tableView.separatorColor = UIColor(red: 238/255, green: 180/255, blue: 180/255, alpha: 1)
+
+        tableView.accessibilityLabel = "BusinessesTableView"
         
         addTableFooterView()
         
@@ -62,6 +64,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         })
         
         searchBar.delegate = self
+        searchBar.accessibilityLabel = "Search Bar"
         self.navigationController?.navigationBar.addSubview(searchBar)
         
         mapView.delegate = self
@@ -82,6 +85,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableFooterView.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
         notificationLabel.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
         loadingView.center = tableFooterView.center
+        loadingView.stopAnimating()
     }
 
     override func didReceiveMemoryWarning() {
