@@ -141,6 +141,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.delegate = self
             
             cell.onSwitch.on = filters["deal"] as? Bool ?? false
+            cell.onSwitch.accessibilityLabel = "OfferDeal"
             
             return cell
             
@@ -201,6 +202,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 cell.delegate = self
                 
                 cell.onSwitch.on = switchStates[indexPath.row] ?? false
+                cell.onSwitch.accessibilityLabel = categories[indexPath.row]["name"]
                 
                 setCategoryCellVisible(indexPath.row, cell: cell)
                 return cell
@@ -400,7 +402,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             isCategoryCollapsed = true
         }
         
-        tableView.reloadData()
+        tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Automatic)
     }
     
     // MARK: Reset filters
@@ -449,6 +451,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 default:
                     break
                 }
+                tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.Automatic)
             } else if indexPath!.section == 2 {
                 // Sort area
                 switch currentImg {
@@ -465,9 +468,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 default:
                     break
                 }
+                tableView.reloadSections(NSIndexSet(index: 2), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
-            
-            tableView.reloadData()
         }
         
     }
