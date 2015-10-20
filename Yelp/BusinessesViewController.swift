@@ -82,6 +82,9 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableFooterView.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
         notificationLabel.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
         loadingView.center = tableFooterView.center
+        
+//        loadingView.stopAnimating()
+//        notificationLabel.hidden = false
     }
 
     override func didReceiveMemoryWarning() {
