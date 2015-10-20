@@ -8,74 +8,58 @@ iOS7 style drop in replacement for UISwitch
 
 ## Usage
 
-### Cocoapods
-
-```
-pod 'SevenSwitch', '~> 2.0'
-```
-
-*Swift support was added in version `2.0`. If your project does not support swift you can use `1.4`.*
-
-### Without Cocoapods
-
-Add `SevenSwitch.swift` to your project and add the `QuartzCore` framework to your project.
-
-### Examples
+To use it, add SevenSwitch.h and SevenSwitch.m files to your project and add the QuartzCore framework to your project.
 
 Initializing and adding the switch to the screen
 
-```swift
-let mySwitch = SevenSwitch()
-self.view.addSubview(mySwitch)
+```objective-c
+SevenSwitch *mySwitch = [[SevenSwitch alloc] initWithFrame:CGRectMake(10, 10, 50, 30)];
+[self.view addSubview:mySwitch];
 ```
 
-When the user manipulates the switch control ("flips" it) a `UIControlEvent.ValueChanged` event is generated.
+When the user manipulates the switch control ("flips" it) a `UIControlEventValueChanged` event is generated.
 
-```swift
-mySwitch.addTarget(self, action: "switchChanged:", forControlEvents: UIControlEvents.ValueChanged)
+```objective-c
+[mySwitch addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
 ```
 
 You can set images for the on/off states
 
-```swift
-mySwitch.offImage = UIImage(named: "cross.png")
-mySwitch.onImage = UIImage(named: "check.png")
-mySwitch.thumbImage = UIImage(named: "thumb.png")
+```objective-c
+mySwitch.offImage = [UIImage imageNamed:@"cross.png"];
+mySwitch.onImage = [UIImage imageNamed:@"check.png"];
+mySwitch.thumbImage = [UIImage imageNamed:@"thumb.png"];
 ```
 
 You can set text for the on/off states
 
-```swift
-mySwitch.offLabel.text = "ON"
-mySwitch.onLabel.text = "OFF"
+```objective-c
+mySwitch.offLabel.text = @"on";
+mySwitch.onLabel.text = @"off";
 ```
 
 You can also customize the switches colors
 
-```swift
-mySwitch.thumbTintColor = UIColor(red: 0.19, green: 0.23, blue: 0.33, alpha: 1)
-mySwitch.activeColor =  UIColor(red: 0.07, green: 0.09, blue: 0.11, alpha: 1)
-mySwitch.inactiveColor =  UIColor(red: 0.07, green: 0.09, blue: 0.11, alpha: 1)
-mySwitch.onTintColor =  UIColor(red: 0.45, green: 0.58, blue: 0.67, alpha: 1)
-mySwitch.borderColor = UIColor.clearColor()
-mySwitch.shadowColor = UIColor.blackColor()
+```objective-c
+mySwitch.thumbTintColor = [UIColor colorWithRed:0.19f green:0.23f blue:0.33f alpha:1.00f];
+mySwitch.activeColor = [UIColor colorWithRed:0.07f green:0.09f blue:0.11f alpha:1.00f];
+mySwitch.inactiveColor = [UIColor colorWithRed:0.07f green:0.09f blue:0.11f alpha:1.00f];
+mySwitch.onTintColor = [UIColor colorWithRed:0.45f green:0.58f blue:0.67f alpha:1.00f];
+mySwitch.borderColor = [UIColor clearColor];
+mySwitch.shadowColor = [UIColor blackColor];
 ```
 
 You can resize the switch frame to whatever you like to make fatter/skinnier controls
 
-```swift
-mySwitch.frame = CGRectMake(0, 0, 100, 50)
+```objective-c
+mySwitch.frame = CGRectMake(0, 0, 100, 50);
 ```
 
 You can turn off the rounded look by setting the `isRounded` property to `NO`
 
-```swift
-mySwitch.isRounded = false
+```objective-c
+mySwitch.isRounded = NO;
 ```
-
-## Swift and Objective-C compatability
-
-SevenSwitch uses Swift as of its 2.0 release. SevenSwitch.swift can be used in Objective-C. See [ViewController.m](SevenSwitchExample/SevenSwitchExample/ViewController.m) for an example.
 
 ## Requirements
 

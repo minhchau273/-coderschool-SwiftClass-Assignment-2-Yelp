@@ -14,7 +14,27 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>KIF.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Nimble.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Yelp.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-YelpTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Quick.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,22 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1BAB308DAC14A1377F04DFF70B4927CE</key>
+		<key>0B3EFBEDEB1CB12D27D0FE7183D0392E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3DF69BC4F2F093DDBA7087B53A8BBD21</key>
+		<key>321BBF44201BA731DC9914CF162C62BB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>76DE1B2C3EF7CAD5C0F470A8A8464D29</key>
+		<key>4EC56E3E76F76FF9DCBF205AAF2CF7F7</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C1AD3051C9C1A2269B432A9562CD02B4</key>
+		<key>581DF63FC357D33D2C76201AD8729767</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>836FD7AB95376E1DDB9554CBD4C1985E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>AE6A4AC269D91F7FF73F67FEEEF0FC11</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C91A46012F8822DFDBAC8BC32FCC9001</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DD368525403FF5CC88BAE33CAF722107</key>
 		<dict>
 			<key>primary</key>
 			<true/>
