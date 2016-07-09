@@ -41,12 +41,11 @@ class Business: NSObject {
         var longitude = 0.0
         if location != nil {
             let addressArray = location!["address"] as? NSArray
-            var street: String? = ""
             if addressArray != nil && addressArray!.count > 0 {
                 address = addressArray![0] as! String
             }
             
-            var neighborhoods = location!["neighborhoods"] as? NSArray
+            let neighborhoods = location!["neighborhoods"] as? NSArray
             if neighborhoods != nil && neighborhoods!.count > 0 {
                 if !address.isEmpty {
                     address += ", "
@@ -77,7 +76,7 @@ class Business: NSObject {
         if categoriesArray != nil {
             var categoryNames = [String]()
             for category in categoriesArray! {
-                var categoryName = category[0]
+                let categoryName = category[0]
                 categoryNames.append(categoryName)
             }
             categories = ", ".join(categoryNames)

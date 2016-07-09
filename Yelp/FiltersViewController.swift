@@ -53,12 +53,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     func getOldFilters() {
         
         // Get old states
-        var switchStatesData = defaults.objectForKey("switchStates") as? NSData
+        let switchStatesData = defaults.objectForKey("switchStates") as? NSData
         if let switchStatesData = switchStatesData {
             switchStates = NSKeyedUnarchiver.unarchiveObjectWithData(switchStatesData) as! [Int:Bool]
         }
         
-        var filtersData = defaults.objectForKey("filters") as? NSData
+        let filtersData = defaults.objectForKey("filters") as? NSData
         if let filtersData = filtersData {
             filters = NSKeyedUnarchiver.unarchiveObjectWithData(filtersData) as! [String : AnyObject]
         }
@@ -94,10 +94,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         delegate?.filtersViewController?(self, didUpdateFilters: filters)
         
         // Save to NSUserDefaults
-        var switchStatesData = NSKeyedArchiver.archivedDataWithRootObject(switchStates)
+        let switchStatesData = NSKeyedArchiver.archivedDataWithRootObject(switchStates)
         self.defaults.setObject(switchStatesData, forKey: "switchStates")
         
-        var filtersData = NSKeyedArchiver.archivedDataWithRootObject(filters)
+        let filtersData = NSKeyedArchiver.archivedDataWithRootObject(filters)
         self.defaults.setObject(filtersData, forKey: "filters")
         
         defaults.synchronize()
@@ -208,7 +208,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 // This is the last row
                 let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
                 
-                let tapSeeAllCell = UITapGestureRecognizer(target: self, action: "tapSeeAll:")
+                let tapSeeAllCell = UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.tapSeeAll(_:)))
                 cell.addGestureRecognizer(tapSeeAllCell)
                 
                 
@@ -221,7 +221,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
             cell.label.text = "Reset filters"
             cell.label.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
-            let tapResetCell = UITapGestureRecognizer(target: self, action: "tapReset:")
+            let tapResetCell = UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.tapReset(_:)))
             cell.addGestureRecognizer(tapResetCell)
             
             return cell
@@ -234,10 +234,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        var headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
         headerView.backgroundColor = UIColor(red: 250/255, green: 234/255, blue: 234/255, alpha: 1)
         
-        var titleLabel = UILabel(frame: CGRect(x: 15, y: 15, width: 320, height: 30))
+        let titleLabel = UILabel(frame: CGRect(x: 15, y: 15, width: 320, height: 30))
         titleLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
         titleLabel.font = UIFont(name: "Helvetica", size: 15)
         

@@ -47,6 +47,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                 self.totalResult = result.total!
                 self.businesses = result.businesses
                 self.tableView.reloadData()
+                self.loadingView.stopAnimating()
                 self.createMarkers()
                 
                 //            for business in self.businesses {
@@ -73,8 +74,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         // When rotate device
         
         // Change size of search bar
-        var navBarHeight = self.navigationController?.navigationBar.frame.height
-        var y = (navBarHeight! - 30) / 2
+        let navBarHeight = self.navigationController?.navigationBar.frame.height
+        let y = (navBarHeight! - 30) / 2
         let screenWidth = CGRectGetWidth(tableView.superview!.frame)
         searchBar.frame = CGRect(x: 53, y: y, width: screenWidth - 100, height: 30)
         
@@ -115,7 +116,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func setTableViewVisible() {
         
         if totalResult > 0 {
-            var buttonImg = mapButton.image
+            let buttonImg = mapButton.image
             if buttonImg == UIImage(named: "Map") {
                 tableView.hidden = false
                 mapView.hidden = true
@@ -195,8 +196,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             term = searchBar.text
         }
         let sortValue = filters["sort"] as? Int
-        var categories = filters["categories"] as? [String]
-        var deal = filters["deal"] as? Bool
+        let categories = filters["categories"] as? [String]
+        let deal = filters["deal"] as? Bool
         var radius = filters["radius"] as! Float?
         if let radiusValue = radius {
             radius = radiusValue * meterConst
@@ -331,7 +332,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @IBAction func onMapButton(sender: AnyObject) {
         
-        var buttonImg = mapButton.image
+        let buttonImg = mapButton.image
         if buttonImg == UIImage(named: "Map") {
             tableView.hidden = true
             mapView.hidden = false
@@ -345,7 +346,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func mapView(mapView: GMSMapView!, markerInfoWindow marker: GMSMarker!) -> UIView! {
+    func mapView(mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
         
 //        var infoWindow = NSBundle.mainBundle().loadNibNamed("InfoWindow", owner: self, options: nil).first! as! CustomInfoWindow
 //        
@@ -378,20 +379,20 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         
         
-        var (business, index) = getBusinessFromMarker(marker)
+        let (business, index) = getBusinessFromMarker(marker)
         
         // New info window view
-        var darkColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
-        var lightColor = UIColor(red: 220/255, green: 140/255, blue: 140/255, alpha: 1.0)
+        let darkColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+        let lightColor = UIColor(red: 220/255, green: 140/255, blue: 140/255, alpha: 1.0)
         
-        var infoWindow = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 90))
+        let infoWindow = UIView(frame: CGRect(x: 0, y: 0, width: 250, height: 90))
         infoWindow.layer.backgroundColor = UIColor(red: 250/255, green: 234/255, blue: 234/255, alpha: 1).CGColor
         
         infoWindow.layer.cornerRadius = 5
         infoWindow.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
         infoWindow.layer.borderWidth = 1
         
-        var nameLabel = UILabel(frame: CGRect(x: 8, y: 8, width: 184, height: 18))
+        let nameLabel = UILabel(frame: CGRect(x: 8, y: 8, width: 184, height: 18))
         nameLabel.text = String(index + 1) + ". " + business!.name!
         nameLabel.font = UIFont.boldSystemFontOfSize(14)
         nameLabel.textColor = darkColor
@@ -399,31 +400,31 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         nameLabel.sizeToFit()
         infoWindow.addSubview(nameLabel)
         
-        var distanceLabel = UILabel(frame: CGRect(x: 200, y: 8, width: 42, height: 14))
+        let distanceLabel = UILabel(frame: CGRect(x: 200, y: 8, width: 42, height: 14))
         distanceLabel.text = business!.distance
         distanceLabel.font = UIFont.systemFontOfSize(12)
         distanceLabel.textColor = lightColor
         infoWindow.addSubview(distanceLabel)
         
-        var ratingY = nameLabel.bounds.origin.y + nameLabel.frame.height + 12
-        var ratingImageView = UIImageView(frame: CGRect(x: 8, y: ratingY, width: 83, height: 15))
+        let ratingY = nameLabel.bounds.origin.y + nameLabel.frame.height + 12
+        let ratingImageView = UIImageView(frame: CGRect(x: 8, y: ratingY, width: 83, height: 15))
         ratingImageView.setImageWithURL(business!.ratingImageURL)
         infoWindow.addSubview(ratingImageView)
         
-        var reviewsCountLabel = UILabel(frame: CGRect(x: 99, y: ratingY, width: 78, height: 14))
+        let reviewsCountLabel = UILabel(frame: CGRect(x: 99, y: ratingY, width: 78, height: 14))
         reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
         reviewsCountLabel.font = UIFont.systemFontOfSize(12)
         reviewsCountLabel.textColor = lightColor
         infoWindow.addSubview(reviewsCountLabel)
         
-        var priceLabel = UILabel(frame: CGRect(x: 228, y: ratingY, width: 14, height: 14))
+        let priceLabel = UILabel(frame: CGRect(x: 228, y: ratingY, width: 14, height: 14))
         priceLabel.text = "$$"
         priceLabel.font = UIFont.systemFontOfSize(12)
         priceLabel.textColor = lightColor
         infoWindow.addSubview(priceLabel)
         
-        var addressY = ratingY + ratingImageView.frame.height + 4
-        var addressLabel = UILabel(frame: CGRect(x: 8, y: addressY, width: 234, height: 14))
+        let addressY = ratingY + ratingImageView.frame.height + 4
+        let addressLabel = UILabel(frame: CGRect(x: 8, y: addressY, width: 234, height: 14))
         addressLabel.text = business!.address!
         addressLabel.font = UIFont.systemFontOfSize(12)
         addressLabel.textColor = darkColor
@@ -431,8 +432,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         addressLabel.sizeToFit()
         infoWindow.addSubview(addressLabel)
         
-        var categoriesY = addressY + addressLabel.frame.height + 4
-        var categoriesLabel = UILabel(frame: CGRect(x: 8, y: categoriesY, width: 234, height: 14))
+        let categoriesY = addressY + addressLabel.frame.height + 4
+        let categoriesLabel = UILabel(frame: CGRect(x: 8, y: categoriesY, width: 234, height: 14))
         categoriesLabel.text = business!.categories!
         categoriesLabel.font = UIFont.systemFontOfSize(12)
         categoriesLabel.textColor = lightColor
@@ -440,18 +441,18 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         categoriesLabel.sizeToFit()
         infoWindow.addSubview(categoriesLabel)
         
-        var viewHeight = categoriesY + categoriesLabel.frame.height + 8
+        let viewHeight = categoriesY + categoriesLabel.frame.height + 8
         infoWindow.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
         
         return infoWindow
     }
     
-    func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
+    func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
         
-        var dvc = self.storyboard?.instantiateViewControllerWithIdentifier("DetailNavC") as! DetailViewController
-        var nc = UINavigationController(rootViewController: dvc)
+        let dvc = self.storyboard?.instantiateViewControllerWithIdentifier("DetailNavC") as! DetailViewController
+        let nc = UINavigationController(rootViewController: dvc)
         
-        var (business, index) = getBusinessFromMarker(marker)
+        let (business, _) = getBusinessFromMarker(marker)
         dvc.selectedBusiness = business
         self.presentViewController(nc, animated: true, completion: nil)
     }
@@ -462,13 +463,13 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         mapView.clear()
         
         if businesses.count > 0 {
-            var camera = GMSCameraPosition.cameraWithLatitude(businesses[0].latitude!, longitude: businesses[0].longitude!, zoom: 15)
+            let camera = GMSCameraPosition.cameraWithLatitude(businesses[0].latitude!, longitude: businesses[0].longitude!, zoom: 15)
             mapView.camera = camera
             mapView.myLocationEnabled = true
             
             // Create maker for each business
             for i in 0..<businesses!.count {
-                var marker = GMSMarker()
+                let marker = GMSMarker()
                 marker.position = CLLocationCoordinate2DMake(businesses[i].latitude!, businesses[i].longitude!)
                 marker.icon = createMarkerIcon(i + 1)
                 marker.map = mapView
@@ -478,15 +479,15 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func createMarkerIcon(no: Int) -> UIImage {
         
-        var markerView = UIView(frame:CGRectMake(0, 0, 50, 50))
+        let markerView = UIView(frame:CGRectMake(0, 0, 50, 50))
         
         //Add icon
-        var icon = UIImageView(frame: CGRectMake(0, 0, 50, 50))
+        let icon = UIImageView(frame: CGRectMake(0, 0, 50, 50))
         icon.image = UIImage(named: "Marker")
         markerView.addSubview(icon)
         
         //Add Label
-        var noLabel = UILabel(frame: CGRectMake(0, 8, 50, 30))
+        let noLabel = UILabel(frame: CGRectMake(0, 8, 50, 30))
         noLabel.text = String(no)
         noLabel.textAlignment = NSTextAlignment.Center
         noLabel.textColor = UIColor.whiteColor()
@@ -497,22 +498,22 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func imageFromView(aView:UIView) -> UIImage {
         
-        if(UIScreen.mainScreen().respondsToSelector("scale")) {
+        if(UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale))) {
             UIGraphicsBeginImageContextWithOptions(aView.frame.size, false, UIScreen.mainScreen().scale)
         }
         else {
             UIGraphicsBeginImageContext(aView.frame.size)
         }
         aView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        var image = UIGraphicsGetImageFromCurrentImageContext()
+        let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
     }
     
     func getBusinessFromMarker(marker: GMSMarker) -> (Business?, Int) {
         
-        var latitude = Double(marker.position.latitude)
-        var longitude = Double(marker.position.longitude)
+        let latitude = Double(marker.position.latitude)
+        let longitude = Double(marker.position.longitude)
         
         for i in 0..<businesses!.count {
             let businessLatitude = businesses[i].latitude as Double!

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -36,13 +37,13 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$$" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CUc-t7-s7r">
-                            <rect key="frame" x="228" y="30" width="14" height="14.5"/>
+                            <rect key="frame" x="225.5" y="30" width="16" height="15"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.86274509803921573" green="0.5490196078431373" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Jones St &amp; Leavenworth St" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lyj-Qh-zra">
-                            <rect key="frame" x="8" y="49" width="234" height="14.5"/>
+                            <rect key="frame" x="8" y="49" width="233.5" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.74509803919999995" green="0.14901960780000001" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -61,7 +62,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1234 Reviews" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="arB-z3-IQa">
-                            <rect key="frame" x="99" y="30" width="77.5" height="14.5"/>
+                            <rect key="frame" x="99" y="30" width="78" height="14.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" red="0.86274509803921573" green="0.5490196078431373" blue="0.5490196078431373" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -72,10 +73,9 @@
                         <constraint firstItem="Lyj-Qh-zra" firstAttribute="top" secondItem="uH3-Zi-kKv" secondAttribute="bottom" constant="4" id="7Nr-Lu-DaS"/>
                         <constraint firstItem="0Uh-a1-bLV" firstAttribute="top" secondItem="Lyj-Qh-zra" secondAttribute="bottom" constant="4" id="835-is-CqB"/>
                         <constraint firstItem="Lyj-Qh-zra" firstAttribute="leading" secondItem="0Uh-a1-bLV" secondAttribute="leading" id="KSs-2u-pxz"/>
-                        <constraint firstItem="uH3-Zi-kKv" firstAttribute="centerY" secondItem="0Uh-a1-bLV" secondAttribute="centerY" constant="-10.75" id="LYM-ZL-cO0"/>
+                        <constraint firstItem="CUc-t7-s7r" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="arB-z3-IQa" secondAttribute="trailing" constant="8" id="MCX-dr-H6s"/>
                         <constraint firstItem="Lyj-Qh-zra" firstAttribute="trailing" secondItem="CUc-t7-s7r" secondAttribute="trailing" id="NTj-hd-7A5"/>
                         <constraint firstAttribute="trailing" secondItem="T2G-EE-s6r" secondAttribute="trailing" constant="8" id="Ncx-51-7os"/>
-                        <constraint firstItem="uH3-Zi-kKv" firstAttribute="centerY" secondItem="0Uh-a1-bLV" secondAttribute="centerY" constant="-10.75" id="TQD-Gf-Zwh"/>
                         <constraint firstItem="5yt-te-Asi" firstAttribute="leading" secondItem="9Do-EJ-DUW" secondAttribute="leading" constant="8" id="U71-fh-F3e"/>
                         <constraint firstItem="5yt-te-Asi" firstAttribute="top" secondItem="9Do-EJ-DUW" secondAttribute="top" constant="8" id="UVj-LJ-VzO"/>
                         <constraint firstItem="arB-z3-IQa" firstAttribute="centerY" secondItem="CUc-t7-s7r" secondAttribute="centerY" id="Xr1-ZQ-Oh4"/>
@@ -90,12 +90,6 @@
                         <constraint firstItem="0Uh-a1-bLV" firstAttribute="trailing" secondItem="CUc-t7-s7r" secondAttribute="trailing" id="yXW-WM-sD4"/>
                         <constraint firstItem="uH3-Zi-kKv" firstAttribute="top" secondItem="5yt-te-Asi" secondAttribute="bottom" constant="4" id="zxU-vD-hBS"/>
                     </constraints>
-                    <variation key="default">
-                        <mask key="constraints">
-                            <exclude reference="LYM-ZL-cO0"/>
-                            <exclude reference="TQD-Gf-Zwh"/>
-                        </mask>
-                    </variation>
                 </view>
             </subviews>
             <constraints>
