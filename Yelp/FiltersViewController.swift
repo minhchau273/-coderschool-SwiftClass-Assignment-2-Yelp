@@ -12,7 +12,7 @@ import UIKit
     optional func filtersViewController(filFiltersViewController: FiltersViewController, didUpdateFilters filters: [String:AnyObject])
 }
 
-class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwitchCellDelegate, DropDownCellDelegate {
+class FiltersViewController: UIViewController {
 
     let defaults = NSUserDefaults.standardUserDefaults()
 
@@ -36,7 +36,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.delegate = self
         tableView.dataSource = self
 
-
         // (miles)
         radii = [nil, 0.3, 1, 5, 20]
 
@@ -45,13 +44,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.tableFooterView = UIView()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     func getOldFilters() {
-
         // Get old states
         let switchStatesData = defaults.objectForKey("switchStates") as? NSData
         if let switchStatesData = switchStatesData {
@@ -68,15 +61,347 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 
-    // MARK: Button
+    // MARK: Radius area
+
+    func setRadiusIcon(row: Int, iconView: UIImageView) {
+        let radiusValue = filters["radius"] as! Float?
+
+        if radiusValue == radii[row] {
+            if isRadiusCollapsed {
+                iconView.image = UIImage(named: "Arrow")
+            } else {
+                iconView.image = UIImage(named: "Tick")
+            }
+            return
+        }
+
+        iconView.image = UIImage(named: "Circle")
+    }
+
+    func setRadiusCellVisible(row: Int, cell: DropDownCell) {
+        let radiusValue = filters["radius"] as! Float?
+        if isRadiusCollapsed && radii[row] != radiusValue {
+            cell.label.hidden = true
+            cell.iconView.hidden = true
+            return
+        }
+
+        cell.label.hidden = false
+        cell.iconView.hidden = false
+    }
+
+    // MARK: Sort area
+
+    func getSortValue() -> Int {
+        let sortValue = filters["sort"] as? Int
+
+        if sortValue != nil {
+            return sortValue!
+        } else {
+            return 0
+        }
+    }
+
+    func setSortIcon(row: Int, iconView: UIImageView) {
+        let sortValue = getSortValue()
+
+        if sortValue == row {
+            if isSortCollapsed {
+                iconView.image = UIImage(named: "Arrow")
+            } else {
+                iconView.image = UIImage(named: "Tick")
+            }
+            return
+        }
+
+        iconView.image = UIImage(named: "Circle")
+    }
+
+    func setSortCellVisible(row: Int, cell: DropDownCell) {
+        let sortValue = getSortValue()
+        if isSortCollapsed && row != sortValue {
+            cell.label.hidden = true
+            cell.iconView.hidden = true
+            return
+        }
+
+        cell.label.hidden = false
+        cell.iconView.hidden = false
+    }
+
+    // MARK: Category area
+
+    func setCategoryCellVisible(row: Int, cell: SwitchCell) {
+        if isCategoryCollapsed && row > 2 && row != categories.count {
+            cell.switchLabel.hidden = true
+            cell.onSwitch.hidden = true
+            return
+        }
+
+        cell.switchLabel.hidden = false
+        cell.onSwitch.hidden = false
+    }
+
+    func tapSeeAll(sender:UITapGestureRecognizer) {
+        // Get SeeAllCell
+        let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: categories.count, inSection: 3)) as! SeeAllCell
+
+        if cell.label.text == "See All" {
+            cell.label.text = "Collapse"
+            isCategoryCollapsed = false
+        } else {
+            cell.label.text = "See All"
+            isCategoryCollapsed = true
+        }
+
+        tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Automatic)
+    }
+
+    // MARK: Reset filters
+
+    func tapReset(sender:UITapGestureRecognizer) {
+        filters["deal"] = false
+        filters["radius"] = radii[0]
+        filters["sort"] = 0
+        switchStates.removeAll(keepCapacity: false)
+
+        tableView.reloadData()
+    }
+
+}
+
+// MARK: - Table view
+
+extension FiltersViewController: UITableViewDelegate, UITableViewDataSource {
+
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 5
+    }
+
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0: return 1
+        case 1: return radii.count
+        case 2: return 3
+        case 3: return categories.count + 1
+        case 4: return 1
+        default: return 0
+        }
+    }
+
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            // Deal area
+            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+
+            cell.switchLabel.text = "Offering a Deal"
+            cell.delegate = self
+
+            cell.onSwitch.on = filters["deal"] as? Bool ?? false
+
+            return cell
+
+        case 1:
+            // Radius area
+            let cell = tableView.dequeueReusableCellWithIdentifier("DropDownCell", forIndexPath: indexPath) as! DropDownCell
+            cell.delegate = self
+
+            // Set label for each cell
+            if indexPath.row == 0 {
+                cell.label.text = "Auto"
+            } else {
+                if radii[indexPath.row] == 1 {
+                    cell.label.text =  String(format: "%g", radii[indexPath.row]!) + " mile"
+                } else {
+                    cell.label.text =  String(format: "%g", radii[indexPath.row]!) + " miles"
+                }
+            }
+
+            setRadiusIcon(indexPath.row, iconView: cell.iconView)
+            setRadiusCellVisible(indexPath.row, cell: cell)
+
+            return cell
+
+        case 2:
+            // Sort area
+            let cell = tableView.dequeueReusableCellWithIdentifier("DropDownCell", forIndexPath: indexPath) as! DropDownCell
+            cell.delegate = self
+
+            switch indexPath.row {
+            case 0:
+                cell.label.text = "Best Match"
+            case 1:
+                cell.label.text = "Distance"
+            case 2:
+                cell.label.text = "Rating"
+            default:
+                break
+            }
+
+            setSortIcon(indexPath.row, iconView: cell.iconView)
+            setSortCellVisible(indexPath.row, cell: cell)
+
+            return cell
+
+        case 3:
+            // Category area
+            if indexPath.row != categories.count {
+                let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
+
+                cell.switchLabel.text = categories[indexPath.row]["name"]
+                cell.delegate = self
+
+                cell.onSwitch.on = switchStates[indexPath.row] ?? false
+
+                setCategoryCellVisible(indexPath.row, cell: cell)
+                return cell
+            } else {
+                // This is the last row
+                let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
+
+                let tapSeeAllCell = UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.tapSeeAll(_:)))
+                cell.addGestureRecognizer(tapSeeAllCell)
+
+                return cell
+            }
+
+        case 4:
+            // Reset row
+            let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
+            cell.label.text = "Reset filters"
+            cell.label.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+            let tapResetCell = UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.tapReset(_:)))
+            cell.addGestureRecognizer(tapResetCell)
+
+            return cell
+
+        default:
+            let cell = UITableViewCell()
+            return cell
+        }
+    }
+
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+        headerView.backgroundColor = UIColor(red: 250/255, green: 234/255, blue: 234/255, alpha: 1)
+
+        let titleLabel = UILabel(frame: CGRect(x: 15, y: 15, width: 320, height: 30))
+        titleLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
+        titleLabel.font = UIFont(name: "Helvetica", size: 15)
+
+        switch section {
+        case 0:
+            titleLabel.text = "Deal"
+        case 1:
+            titleLabel.text = "Distance"
+        case 2:
+            titleLabel.text = "Sort By"
+        case 3:
+            titleLabel.text = "Category"
+        default:
+            return nil
+        }
+
+        headerView.addSubview(titleLabel)
+
+        return headerView
+    }
+
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 45
+    }
+
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 1:
+            if isRadiusCollapsed {
+                let radiusValue = filters["radius"] as! Float?
+                if radiusValue != radii[indexPath.row] {
+                    return 0
+                }
+            }
+        case 2:
+            if isSortCollapsed {
+                let sortValue = getSortValue()
+                if sortValue != indexPath.row {
+                    return 0
+                }
+            }
+        case 3:
+            if isCategoryCollapsed {
+                if indexPath.row > 2 && indexPath.row != categories.count {
+                    return 0
+                }
+            }
+        default:
+            break
+        }
+        
+        return 35.0
+    }
+
+}
+
+// MARK: - Implement delegate
+
+extension FiltersViewController: SwitchCellDelegate, DropDownCellDelegate {
+
+    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
+        let indexPath = tableView.indexPathForCell(switchCell)!
+
+        if indexPath.section == 0 {
+            self.filters["deal"] = value
+        } else if indexPath.section == 3 {
+            switchStates[indexPath.row] = value
+        }
+    }
+
+    func selectCell(dropDownCell: DropDownCell, didSelect currentImg: UIImage) {
+        let indexPath = tableView.indexPathForCell(dropDownCell)
+
+        if indexPath != nil {
+            if indexPath!.section == 1 {
+                // Radius area
+                switch currentImg {
+                case UIImage(named: "Arrow")!:
+                    isRadiusCollapsed = false
+                case UIImage(named: "Tick")!:
+                    isRadiusCollapsed = true
+                case UIImage(named: "Circle")!:
+                    filters["radius"] = radii[indexPath!.row]
+                    isRadiusCollapsed = true
+                default:
+                    break
+                }
+            } else if indexPath!.section == 2 {
+                // Sort area
+                switch currentImg {
+                case UIImage(named: "Arrow")!:
+                    isSortCollapsed = false
+                case UIImage(named: "Tick")!:
+                    isSortCollapsed = true
+                case UIImage(named: "Circle")!:
+                    filters["sort"] = indexPath!.row
+                    isSortCollapsed = true
+                default:
+                    break
+                }
+            }
+        }
+    }
+
+}
+
+// MARK: - User Interactions
+
+extension FiltersViewController {
 
     @IBAction func onCancelButton(sender: AnyObject) {
-
         dismissViewControllerAnimated(true, completion: nil)
     }
 
     @IBAction func onSearchButton(sender: AnyObject) {
-
         dismissViewControllerAnimated(true, completion: nil)
 
         var selectedCategories = [String]()
@@ -99,383 +424,17 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         let filtersData = NSKeyedArchiver.archivedDataWithRootObject(filters)
         self.defaults.setObject(filtersData, forKey: "filters")
-
+        
         defaults.synchronize()
     }
 
-    // MARK: Table view
+}
 
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 5
-    }
+// MARK: - List of Categories
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        switch section {
-        case 0:
-            return 1
-        case 1:
-            return radii.count
-        case 2:
-            return 3
-        case 3:
-            return categories.count + 1
-        case 4:
-            return 1
-        default:
-            break
-        }
-
-        return 0
-    }
-
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-
-        switch indexPath.section {
-        case 0:
-            // Deal area
-
-            let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-
-            cell.switchLabel.text = "Offering a Deal"
-            cell.delegate = self
-
-            cell.onSwitch.on = filters["deal"] as? Bool ?? false
-
-            return cell
-
-        case 1:
-            // Radius area
-
-            let cell = tableView.dequeueReusableCellWithIdentifier("DropDownCell", forIndexPath: indexPath) as! DropDownCell
-            cell.delegate = self
-
-            // Set label for each cell
-            if indexPath.row == 0 {
-                cell.label.text = "Auto"
-            } else {
-                if radii[indexPath.row] == 1 {
-                    cell.label.text =  String(format: "%g", radii[indexPath.row]!) + " mile"
-                } else {
-                    cell.label.text =  String(format: "%g", radii[indexPath.row]!) + " miles"
-                }
-            }
-
-            setRadiusIcon(indexPath.row, iconView: cell.iconView)
-            setRadiusCellVisible(indexPath.row, cell: cell)
-
-            return cell
-
-        case 2:
-            // Sort area
-
-            let cell = tableView.dequeueReusableCellWithIdentifier("DropDownCell", forIndexPath: indexPath) as! DropDownCell
-            cell.delegate = self
-
-            switch indexPath.row {
-            case 0:
-                cell.label.text = "Best Match"
-                break
-            case 1:
-                cell.label.text = "Distance"
-                break
-            case 2:
-                cell.label.text = "Rating"
-                break
-            default:
-                break
-            }
-
-            setSortIcon(indexPath.row, iconView: cell.iconView)
-            setSortCellVisible(indexPath.row, cell: cell)
-
-            return cell
-
-        case 3:
-            // Category area
-
-            if indexPath.row != categories.count {
-                let cell = tableView.dequeueReusableCellWithIdentifier("SwitchCell", forIndexPath: indexPath) as! SwitchCell
-
-                cell.switchLabel.text = categories[indexPath.row]["name"]
-                cell.delegate = self
-
-                cell.onSwitch.on = switchStates[indexPath.row] ?? false
-
-                setCategoryCellVisible(indexPath.row, cell: cell)
-                return cell
-            } else {
-                // This is the last row
-                let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
-
-                let tapSeeAllCell = UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.tapSeeAll(_:)))
-                cell.addGestureRecognizer(tapSeeAllCell)
-
-
-                return cell
-            }
-
-        case 4:
-            // Reset row
-
-            let cell = tableView.dequeueReusableCellWithIdentifier("SeeAllCell", forIndexPath: indexPath) as! SeeAllCell
-            cell.label.text = "Reset filters"
-            cell.label.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
-            let tapResetCell = UITapGestureRecognizer(target: self, action: #selector(FiltersViewController.tapReset(_:)))
-            cell.addGestureRecognizer(tapResetCell)
-
-            return cell
-
-        default:
-            let cell = UITableViewCell()
-            return cell
-        }
-    }
-
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
-        headerView.backgroundColor = UIColor(red: 250/255, green: 234/255, blue: 234/255, alpha: 1)
-
-        let titleLabel = UILabel(frame: CGRect(x: 15, y: 15, width: 320, height: 30))
-        titleLabel.textColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0)
-        titleLabel.font = UIFont(name: "Helvetica", size: 15)
-
-        switch section {
-        case 0:
-            titleLabel.text = "Deal"
-            break
-        case 1:
-            titleLabel.text = "Distance"
-            break
-        case 2:
-            titleLabel.text = "Sort By"
-            break
-        case 3:
-            titleLabel.text = "Category"
-            break
-        default:
-            return nil
-        }
-
-        headerView.addSubview(titleLabel)
-
-        return headerView
-    }
-
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 45
-    }
-
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-
-        switch indexPath.section {
-        case 1:
-            if isRadiusCollapsed {
-                let radiusValue = filters["radius"] as! Float?
-                if radiusValue != radii[indexPath.row] {
-                    return 0
-                }
-            }
-            break
-        case 2:
-            if isSortCollapsed {
-                let sortValue = getSortValue()
-                if sortValue != indexPath.row {
-                    return 0
-                }
-            }
-            break
-        case 3:
-            if isCategoryCollapsed {
-                if indexPath.row > 2 && indexPath.row != categories.count {
-                    return 0
-                }
-            }
-            break
-        default:
-            break
-        }
-
-        return 35.0
-    }
-
-    // MARK: Radius area
-
-    func setRadiusIcon(row: Int, iconView: UIImageView) {
-
-        let radiusValue = filters["radius"] as! Float?
-
-        if radiusValue == radii[row] {
-            if isRadiusCollapsed {
-                iconView.image = UIImage(named: "Arrow")
-            } else {
-                iconView.image = UIImage(named: "Tick")
-            }
-            return
-        }
-
-        iconView.image = UIImage(named: "Circle")
-    }
-
-    func setRadiusCellVisible(row: Int, cell: DropDownCell) {
-
-        let radiusValue = filters["radius"] as! Float?
-        if isRadiusCollapsed && radii[row] != radiusValue {
-            cell.label.hidden = true
-            cell.iconView.hidden = true
-            return
-        }
-
-        cell.label.hidden = false
-        cell.iconView.hidden = false
-    }
-
-    // MARK: Sort area
-
-    func getSortValue() -> Int {
-
-        let sortValue = filters["sort"] as? Int
-
-        if sortValue != nil {
-            return sortValue!
-        } else {
-            return 0
-        }
-    }
-
-    func setSortIcon(row: Int, iconView: UIImageView) {
-
-        let sortValue = getSortValue()
-
-        if sortValue == row {
-            if isSortCollapsed {
-                iconView.image = UIImage(named: "Arrow")
-            } else {
-                iconView.image = UIImage(named: "Tick")
-            }
-            return
-        }
-
-        iconView.image = UIImage(named: "Circle")
-    }
-
-    func setSortCellVisible(row: Int, cell: DropDownCell) {
-
-        let sortValue = getSortValue()
-        if isSortCollapsed && row != sortValue {
-            cell.label.hidden = true
-            cell.iconView.hidden = true
-            return
-        }
-
-        cell.label.hidden = false
-        cell.iconView.hidden = false
-    }
-
-    // MARK: Category area
-
-    func setCategoryCellVisible(row: Int, cell: SwitchCell) {
-
-        if isCategoryCollapsed && row > 2 && row != categories.count {
-            cell.switchLabel.hidden = true
-            cell.onSwitch.hidden = true
-            return
-        }
-
-        cell.switchLabel.hidden = false
-        cell.onSwitch.hidden = false
-    }
-
-    func tapSeeAll(sender:UITapGestureRecognizer) {
-
-        // Get SeeAllCell
-        let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: categories.count, inSection: 3)) as! SeeAllCell
-
-        if cell.label.text == "See All" {
-            cell.label.text = "Collapse"
-            isCategoryCollapsed = false
-        } else {
-            cell.label.text = "See All"
-            isCategoryCollapsed = true
-        }
-
-        tableView.reloadSections(NSIndexSet(index: 3), withRowAnimation: UITableViewRowAnimation.Automatic)
-    }
-
-    // MARK: Reset filters
-
-    func tapReset(sender:UITapGestureRecognizer) {
-
-        filters["deal"] = false
-        filters["radius"] = radii[0]
-        filters["sort"] = 0
-        switchStates.removeAll(keepCapacity: false)
-
-        tableView.reloadData()
-    }
-
-    // MARK: Implement delegate
-
-    func switchCell(switchCell: SwitchCell, didChangeValue value: Bool) {
-
-        let indexPath = tableView.indexPathForCell(switchCell)!
-
-        if indexPath.section == 0 {
-            self.filters["deal"] = value
-        } else if indexPath.section == 3 {
-            switchStates[indexPath.row] = value
-        }
-    }
-
-    func selectCell(dropDownCell: DropDownCell, didSelect currentImg: UIImage) {
-
-        let indexPath = tableView.indexPathForCell(dropDownCell)
-
-        if indexPath != nil {
-            if indexPath!.section == 1 {
-                // Radius area
-                switch currentImg {
-                case UIImage(named: "Arrow")!:
-                    isRadiusCollapsed = false
-                    break
-                case UIImage(named: "Tick")!:
-                    isRadiusCollapsed = true
-                    break
-                case UIImage(named: "Circle")!:
-                    filters["radius"] = radii[indexPath!.row]
-                    isRadiusCollapsed = true
-                    break
-                default:
-                    break
-                }
-            } else if indexPath!.section == 2 {
-                // Sort area
-                switch currentImg {
-                case UIImage(named: "Arrow")!:
-                    isSortCollapsed = false
-                    break
-                case UIImage(named: "Tick")!:
-                    isSortCollapsed = true
-                    break
-                case UIImage(named: "Circle")!:
-                    filters["sort"] = indexPath!.row
-                    isSortCollapsed = true
-                    break
-                default:
-                    break
-                }
-            }
-
-            //tableView.reloadData()
-        }
-
-    }
-
-    // MARK: List of Categories
+extension FiltersViewController {
 
     func yelpCategories() -> [[String: String]] {
-
         return [["name" : "Afghan", "code": "afghani"],
                 ["name" : "African", "code": "african"],
                 ["name" : "American, New", "code": "newamerican"],
@@ -646,5 +605,5 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 ["name" : "Wraps", "code": "wraps"],
                 ["name" : "Yugoslav", "code": "yugoslav"]]
     }
-    
+
 }

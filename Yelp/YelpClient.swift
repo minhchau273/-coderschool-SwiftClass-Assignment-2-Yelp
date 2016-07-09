@@ -19,6 +19,7 @@ enum YelpSortMode: Int {
 }
 
 class YelpClient: BDBOAuth1RequestOperationManager {
+
     var accessToken: String!
     var accessSecret: String!
 
@@ -63,7 +64,6 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         }
 
         if sort != nil {
-            // parameters["sort"] = sort!.rawValue
             parameters["sort"] = sort!
         }
 
@@ -90,7 +90,6 @@ class YelpClient: BDBOAuth1RequestOperationManager {
             var dictionaries = response["businesses"] as? [NSDictionary]
             if dictionaries != nil {
                 let result = Result(total: total!, businesses: Business.businesses(dictionaries!))
-                //                completion(Business.businesses(array: dictionaries!), nil)
                 completion(result, nil)
             }
             }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in

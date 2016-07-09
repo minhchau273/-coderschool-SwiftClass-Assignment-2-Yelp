@@ -10,6 +10,7 @@ import UIKit
 import SwiftString
 
 class Business: NSObject {
+
     let name: String?
     let address: String?
     let imageURL: NSURL?
@@ -22,7 +23,6 @@ class Business: NSObject {
     let phone: String?
     let latitude: Double?
     let longitude: Double?
-
 
     init(dictonary: NSDictionary) {
         name = dictonary["name"] as? String
@@ -122,7 +122,6 @@ class Business: NSObject {
             displayPhone = "N/A"
         }
         self.phone = displayPhone
-
     }
 
     class func businesses(array: [NSDictionary]) -> [Business] {

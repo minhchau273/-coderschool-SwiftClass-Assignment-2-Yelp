@@ -49,11 +49,6 @@ class DetailViewController: UIViewController {
         configDirectionView()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     @IBAction func onBackButton(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }
@@ -70,6 +65,12 @@ class DetailViewController: UIViewController {
         ratingStarView.setImageWithURL(selectedBusiness.ratingImageURL)
         imageView.setImageWithURL(selectedBusiness.imageURL)
     }
+    
+}
+
+// MARK: - Google Maps
+
+extension DetailViewController {
 
     func loadMap() {
         let camera = GMSCameraPosition.cameraWithLatitude(selectedBusiness.latitude!, longitude: selectedBusiness.longitude!, zoom: 15)
@@ -83,7 +84,6 @@ class DetailViewController: UIViewController {
     }
 
     func configDirectionView() {
-
         getDirectionView.layer.cornerRadius = 5
         getDirectionView.layer.borderWidth = 1
         getDirectionView.layer.borderColor = UIColor(red: 160/255, green: 160/255, blue: 160/255, alpha: 1.0).CGColor
@@ -95,7 +95,6 @@ class DetailViewController: UIViewController {
     // MARK: Get direction
 
     func onGetDirection(sender:UITapGestureRecognizer) {
-
         if !showedDirection {
             getDirection(selectedBusiness.latitude!, lng: selectedBusiness.longitude!)
             showDirection()
@@ -105,7 +104,6 @@ class DetailViewController: UIViewController {
     }
 
     func getDirection(lat: Double, lng: Double) {
-
         let sUrl = String(format: "http://maps.googleapis.com/maps/api/directions/json?origin=%f,%f&destination=%f,%f&mode=driving", arguments: [myLocation.latitude, myLocation.longitude, lat, lng])
 
         let url = NSURL(string: sUrl)
@@ -151,5 +149,5 @@ class DetailViewController: UIViewController {
         polyline.strokeWidth = 5
         polyline.map = mapView
     }
-    
+
 }

@@ -20,22 +20,13 @@ class DropDownCell: UITableViewCell {
 
     var delegate: DropDownCellDelegate!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-
-
-    }
-
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        //        println("select drop down cell")
         if delegate != nil {
             delegate?.selectCell?(self, didSelect: iconView.image!)
         }
-        
     }
     
 }

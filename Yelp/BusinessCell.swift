@@ -33,10 +33,8 @@ class BusinessCell: UITableViewCell {
             reviewsCountLabel.text = "\(business.reviewCount!) Reviews"
             ratingImageView.setImageWithURL(business.ratingImageURL)
             distanceLabel.text = business.distance
-
         }
     }
-
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -55,10 +53,4 @@ class BusinessCell: UITableViewCell {
         addressLabel.preferredMaxLayoutWidth = addressLabel.frame.size.width
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
-    
 }

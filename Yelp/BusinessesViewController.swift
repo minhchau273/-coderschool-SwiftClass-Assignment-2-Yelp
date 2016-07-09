@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FiltersViewControllerDelegate, UISearchBarDelegate, GMSMapViewDelegate {
+class BusinessesViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -19,8 +19,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 
     @IBOutlet weak var mapView: GMSMapView!
 
-    var totalResult = 0 as Int
-    var businesses : [Business]!
+    var totalResult = 0
+    var businesses: [Business]!
     var searchBar = UISearchBar()
     var keyword = "Restaurants"
     var filters = [String : AnyObject]()
@@ -28,7 +28,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var loadingView: UIActivityIndicatorView!
     var notificationLabel: UILabel!
 
-    let meterConst = 1609.344 as Float
+    let meterConst: Float = 1609.344
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,19 +42,12 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         addTableFooterView()
 
         Business.searchWithTerm(nil, completion: { (result: Result!, error: NSError!) -> Void in
-
             if result != nil {
                 self.totalResult = result.total!
                 self.businesses = result.businesses
                 self.tableView.reloadData()
                 self.loadingView.stopAnimating()
                 self.createMarkers()
-
-                //            for business in self.businesses {
-                //                println(business.name!)
-                //                println(business.address!)
-                //            }
-
             } else {
                 self.totalResult = 0
             }
@@ -67,7 +60,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
 
         mapView.delegate = self
         mapView.hidden = true
-
     }
 
     override func viewDidLayoutSubviews() {
@@ -83,22 +75,65 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableFooterView.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
         notificationLabel.frame = CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50)
         loadingView.center = tableFooterView.center
-
-        //        loadingView.stopAnimating()
-        //        notificationLabel.hidden = false
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func searchBusisness() {
+        var term: String?
+        if !searchBar.text!.isEmpty {
+            term = searchBar.text
+        }
+
+        let sort = filters["sort"] as? Int
+        let categories = self.filters["categories"] as? [String]
+        let deal = self.filters["deal"] as? Bool
+        let radius = self.filters["radius"] as! Float?
+        let offset = businesses.count
+
+        Business.searchWithTerm(term, sort: sort, categories: categories, deals: deal, radius: radius, offset: offset) { (result: Result!, error: NSError!) -> Void in
+            if result != nil {
+                self.totalResult = result.total!
+
+                if offset < result.total {
+                    for b in result.businesses {
+                        self.businesses.append(b)
+                    }
+                }
+                self.tableView.reloadData()
+                self.createMarkers()
+            } else {
+                self.totalResult = 0
+            }
+
+            self.setTableViewVisible()
+        }
     }
 
-    // MARK: Table view
+    // MARK: Transfer between 2 view controllers
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let navigationController = segue.destinationViewController as! UINavigationController
+
+        if navigationController.topViewController is FiltersViewController {
+            let filtersViewController = navigationController.topViewController as! FiltersViewController
+            filtersViewController.delegate = self
+        } else if navigationController.topViewController is DetailViewController {
+            let detailViewController = navigationController.topViewController as! DetailViewController
+
+            var indexPath: AnyObject!
+            indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
+
+            detailViewController.selectedBusiness = businesses[indexPath!.row]
+        }
+    }
+
+}
+
+// MARK: - Table view
+
+extension BusinessesViewController: UITableViewDelegate, UITableViewDataSource {
 
     func addTableFooterView() {
-
         tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50))
-        print("width: \(tableFooterView.frame.width)")
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         loadingView.startAnimating()
         loadingView.center = tableFooterView.center
@@ -114,7 +149,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func setTableViewVisible() {
-
         if totalResult > 0 {
             let buttonImg = mapButton.image
             if buttonImg == UIImage(named: "Map") {
@@ -133,23 +167,16 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        if businesses != nil {
-            return businesses.count
-        } else {
-            return 0
-        }
+        return businesses?.count ?? 0
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-
         let cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell", forIndexPath: indexPath) as! BusinessCell
 
         cell.business = businesses[indexPath.row]
         cell.nameLabel.text = String(indexPath.row + 1) + ". " + businesses[indexPath.row].name!
 
         if indexPath.row == businesses.count - 1 {
-
             if businesses.count < totalResult {
                 loadingView.startAnimating()
                 notificationLabel.hidden = true
@@ -165,71 +192,15 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.layoutMargins = UIEdgeInsetsZero
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsetsZero
-
+        
         return cell
     }
 
-    // MARK: Transfer between 2 view controllers
+}
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+// MARK: - Search bar
 
-        let navigationController = segue.destinationViewController as! UINavigationController
-
-        if navigationController.topViewController is FiltersViewController {
-            let filtersViewController = navigationController.topViewController as! FiltersViewController
-            filtersViewController.delegate = self
-        } else if navigationController.topViewController is DetailViewController {
-            let detailViewController = navigationController.topViewController as! DetailViewController
-
-            var indexPath: AnyObject!
-            indexPath = tableView.indexPathForCell(sender as! UITableViewCell)
-
-            detailViewController.selectedBusiness = businesses[indexPath!.row]
-        }
-    }
-
-    func filtersViewController(filFiltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-
-        // Get filters from FiltersViewController
-        var term: String?
-        if !searchBar.text!.isEmpty {
-            term = searchBar.text
-        }
-        let sortValue = filters["sort"] as? Int
-        let categories = filters["categories"] as? [String]
-        let deal = filters["deal"] as? Bool
-        var radius = filters["radius"] as! Float?
-        if let radiusValue = radius {
-            radius = radiusValue * meterConst
-        }
-
-        // Set filters in this view controller
-        self.filters["sort"] = sortValue!
-        self.filters["categories"] = categories
-        self.filters["deal"] = deal
-        self.filters["radius"] = radius
-
-        Business.searchWithTerm(term, sort: sortValue, categories: categories, deals: deal, radius: radius, offset: nil) { (result: Result!, error: NSError!) -> Void in
-
-            if result != nil {
-                self.totalResult = result.total!
-                self.businesses = result.businesses
-                self.tableView.reloadData()
-                self.setTableViewVisible()
-                self.createMarkers()
-                // println("total: \(result.total)")
-
-                // Scroll to the top of table view
-                self.tableView.contentOffset = CGPointMake(0, 0 - self.tableView.contentInset.top)
-            } else {
-                self.totalResult = 0
-            }
-
-            self.setTableViewVisible()
-        }
-    }
-
-    // MARK: Search bar
+extension BusinessesViewController: UISearchBarDelegate {
 
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesBegan(touches, withEvent: event)
@@ -237,7 +208,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-
         searchBar.enablesReturnKeyAutomatically = false
         searchBar.showsCancelButton = true
 
@@ -264,7 +234,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func searchBarTextDidEndEditing(searchBar: UISearchBar) {
-
         searchBar.showsCancelButton = false
 
         let x = searchBar.frame.origin.x
@@ -281,57 +250,24 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-
         searchBar.text = ""
         searchBar.resignFirstResponder()
     }
 
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-
         businesses.removeAll(keepCapacity: false)
         tableView.reloadData()
         searchBusisness()
         searchBar.resignFirstResponder()
     }
 
-    func searchBusisness() {
+}
 
-        var term: String?
-        if !searchBar.text!.isEmpty {
-            term = searchBar.text
-        }
+// MARK: - Google Map
 
-        let sort = filters["sort"] as? Int
-        let categories = self.filters["categories"] as? [String]
-        let deal = self.filters["deal"] as? Bool
-        let radius = self.filters["radius"] as! Float?
-        let offset = businesses.count
-
-        Business.searchWithTerm(term, sort: sort, categories: categories, deals: deal, radius: radius, offset: offset) { (result: Result!, error: NSError!) -> Void in
-
-            if result != nil {
-                self.totalResult = result.total!
-
-                if offset < result.total {
-                    for b in result.businesses {
-                        self.businesses.append(b)
-                    }
-                }
-                self.tableView.reloadData()
-                self.createMarkers()
-                //println("total: \(result.total)")
-            } else {
-                self.totalResult = 0
-            }
-
-            self.setTableViewVisible()
-        }
-    }
-
-    // MARK: Google Map
+extension BusinessesViewController: GMSMapViewDelegate {
 
     @IBAction func onMapButton(sender: AnyObject) {
-
         let buttonImg = mapButton.image
         if buttonImg == UIImage(named: "Map") {
             tableView.hidden = true
@@ -347,38 +283,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func mapView(mapView: GMSMapView, markerInfoWindow marker: GMSMarker) -> UIView? {
-
-        //        var infoWindow = NSBundle.mainBundle().loadNibNamed("InfoWindow", owner: self, options: nil).first! as! CustomInfoWindow
-        //
-        //        println("view height: \(infoWindow.windowView.frame.height)")
-        //
-        //        infoWindow.layer.cornerRadius = 5
-        //        infoWindow.layer.borderColor = UIColor(red: 190/255, green: 38/255, blue: 37/255, alpha: 1.0).CGColor
-        //        infoWindow.layer.borderWidth = 1
-        //
-        //        var (business, index) = getBusinessFromMarker(marker)
-        //        if business != nil {
-        //            infoWindow.nameLabel.text = String(index + 1) + ". " + business!.name!
-        //            infoWindow.distanceLabel.text = business!.distance
-        //            infoWindow.reviewsCountLabel.text = "\(business!.reviewCount!) Reviews"
-        //            infoWindow.addressLabel.text = business!.address!
-        //            infoWindow.categoriesLabel.text = business!.categories!
-        //            infoWindow.ratingImageView.setImageWithURL(business!.ratingImageURL)
-        //        }
-        //
-        //        infoWindow.nameLabel.numberOfLines = 0
-        //        infoWindow.nameLabel.sizeToFit()
-        //
-        //        var viewHeight = 72 + infoWindow.nameLabel.frame.height
-        //        infoWindow.windowView.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
-        //
-        //
-        //        println("view height: \(infoWindow.windowView.frame.height)")
-        //
-        //        infoWindow.frame = CGRect(x: 0, y: 0, width: 250, height: viewHeight)
-
-
-
         let (business, index) = getBusinessFromMarker(marker)
 
         // New info window view
@@ -417,7 +321,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         reviewsCountLabel.textColor = lightColor
         infoWindow.addSubview(reviewsCountLabel)
 
-        let priceLabel = UILabel(frame: CGRect(x: 228, y: ratingY, width: 14, height: 14))
+        let priceLabel = UILabel(frame: CGRect(x: 228, y: ratingY, width: 16, height: 14))
         priceLabel.text = "$$"
         priceLabel.font = UIFont.systemFontOfSize(12)
         priceLabel.textColor = lightColor
@@ -448,7 +352,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func mapView(mapView: GMSMapView, didTapInfoWindowOfMarker marker: GMSMarker) {
-
         let dvc = self.storyboard?.instantiateViewControllerWithIdentifier("DetailNavC") as! DetailViewController
         let nc = UINavigationController(rootViewController: dvc)
 
@@ -458,7 +361,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func createMarkers() {
-
         // Clear all markers before creating new ones
         mapView.clear()
 
@@ -478,7 +380,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func createMarkerIcon(no: Int) -> UIImage {
-
         let markerView = UIView(frame:CGRectMake(0, 0, 50, 50))
 
         //Add icon
@@ -497,7 +398,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     func imageFromView(aView:UIView) -> UIImage {
-
         if(UIScreen.mainScreen().respondsToSelector(#selector(NSDecimalNumberBehaviors.scale))) {
             UIGraphicsBeginImageContextWithOptions(aView.frame.size, false, UIScreen.mainScreen().scale)
         }
@@ -509,12 +409,11 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         UIGraphicsEndImageContext()
         return image
     }
-    
+
     func getBusinessFromMarker(marker: GMSMarker) -> (Business?, Int) {
-        
         let latitude = Double(marker.position.latitude)
         let longitude = Double(marker.position.longitude)
-        
+
         for i in 0..<businesses!.count {
             let businessLatitude = businesses[i].latitude as Double!
             let businessLongitude = businesses[i].longitude as Double!
@@ -525,5 +424,49 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         return (nil, -1)
     }
-    
+
+}
+
+// MARK: - FiltersViewControllerDelegate
+
+extension BusinessesViewController: FiltersViewControllerDelegate {
+
+    func filtersViewController(filFiltersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
+        // Get filters from FiltersViewController
+        var term: String?
+        if !searchBar.text!.isEmpty {
+            term = searchBar.text
+        }
+        let sortValue = filters["sort"] as? Int
+        let categories = filters["categories"] as? [String]
+        let deal = filters["deal"] as? Bool
+        var radius = filters["radius"] as! Float?
+        if let radiusValue = radius {
+            radius = radiusValue * meterConst
+        }
+
+        // Set filters in this view controller
+        self.filters["sort"] = sortValue!
+        self.filters["categories"] = categories
+        self.filters["deal"] = deal
+        self.filters["radius"] = radius
+
+        Business.searchWithTerm(term, sort: sortValue, categories: categories, deals: deal, radius: radius, offset: nil) { (result: Result!, error: NSError!) -> Void in
+            if result != nil {
+                self.totalResult = result.total!
+                self.businesses = result.businesses
+                self.tableView.reloadData()
+                self.setTableViewVisible()
+                self.createMarkers()
+
+                // Scroll to the top of table view
+                self.tableView.contentOffset = CGPointMake(0, 0 - self.tableView.contentInset.top)
+            } else {
+                self.totalResult = 0
+            }
+
+            self.setTableViewVisible()
+        }
+    }
+
 }
