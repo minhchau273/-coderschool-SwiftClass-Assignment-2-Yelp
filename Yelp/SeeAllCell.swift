@@ -2,7 +2,7 @@
 //  SeeAllCell.swift
 //  Yelp
 //
-//  Created by Dave Vo on 9/5/15.
+//  Created by Chau Vo on 9/5/15.
 //  Copyright (c) 2015 Chau Vo. All rights reserved.
 //
 
