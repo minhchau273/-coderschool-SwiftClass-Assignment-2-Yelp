@@ -11,7 +11,7 @@ import Foundation
 class Location: NSObject {
     let latitude: Double
     let longitude: Double
-    
+
     init(lat: Double, lng: Double) {
         self.latitude = lat
         self.longitude = lng

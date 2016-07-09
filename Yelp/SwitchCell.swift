@@ -13,23 +13,23 @@ import UIKit
 }
 
 class SwitchCell: UITableViewCell {
-    
+
     @IBOutlet weak var switchLabel: UILabel!
-    
+
     @IBOutlet weak var switchView: UIView!
-    
+
     var onSwitch: UISwitch!
-    
+
     var delegate: SwitchCellDelegate!
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         onSwitch = UISwitch(frame: CGRect(x: 5, y: 0, width: 45, height: 25))
         onSwitch.onTintColor = UIColor(red: 235/255, green: 173/255, blue: 173/255, alpha: 1.0)
         onSwitch.transform = CGAffineTransformMakeScale(0.75, 0.75)
         switchView.addSubview(onSwitch)
-        
+
         onSwitch.addTarget(self, action: #selector(SwitchCell.switchValueChanged), forControlEvents: UIControlEvents.ValueChanged)
       
     }
@@ -39,7 +39,7 @@ class SwitchCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+
     func switchValueChanged() {
         if delegate != nil {
             delegate?.switchCell?(self, didChangeValue: onSwitch.on)

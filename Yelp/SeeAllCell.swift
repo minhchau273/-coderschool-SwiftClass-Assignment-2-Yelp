@@ -9,8 +9,8 @@
 import UIKit
 
 class SeeAllCell: UITableViewCell {
-    
-    
+
+
     @IBOutlet weak var label: UILabel!
 
     override func awakeFromNib() {
@@ -23,5 +23,5 @@ class SeeAllCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
 }

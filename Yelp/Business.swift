@@ -22,18 +22,18 @@ class Business: NSObject {
     let phone: String?
     let latitude: Double?
     let longitude: Double?
-    
-    
+
+
     init(dictonary: NSDictionary) {
         name = dictonary["name"] as? String
-        
+
         let imageURLString = dictonary["image_url"] as? String
         if imageURLString != nil {
             imageURL = NSURL(string: imageURLString!)
         } else {
             imageURL = nil
         }
-        
+
         let location = dictonary["location"] as? NSDictionary
         var address = ""
         var displayAddress = ""
@@ -44,7 +44,7 @@ class Business: NSObject {
             if addressArray != nil && addressArray!.count > 0 {
                 address = addressArray![0] as! String
             }
-            
+
             let neighborhoods = location!["neighborhoods"] as? NSArray
             if neighborhoods != nil && neighborhoods!.count > 0 {
                 if !address.isEmpty {
@@ -52,7 +52,7 @@ class Business: NSObject {
                 }
                 address += neighborhoods![0] as! String
             }
-            
+
             // Get display address
             let displayAddressArray = location!["display_address"] as? NSArray
             if displayAddressArray != nil && displayAddressArray!.count > 0 {
@@ -62,7 +62,7 @@ class Business: NSObject {
                 // Remove ", " at the end
                 displayAddress = displayAddress[0..<(displayAddress.characters.count - 2)]
             }
-            
+
             // Get latitude and longitude
             latitude = (location!.valueForKeyPath("coordinate.latitude") as? Double)!
             longitude = (location!.valueForKeyPath("coordinate.longitude") as? Double)!
@@ -71,7 +71,7 @@ class Business: NSObject {
         self.displayAddress = displayAddress
         self.latitude = latitude
         self.longitude = longitude
-        
+
         let categoriesArray = dictonary["categories"] as? [[String]]
         if categoriesArray != nil {
             var categoryNames = [String]()
@@ -83,7 +83,7 @@ class Business: NSObject {
         } else {
             categories = nil
         }
-        
+
         let distanceMeters = dictonary["distance"] as? NSNumber
         if distanceMeters != nil {
             let milesPerMeter = 0.000621371
@@ -91,23 +91,23 @@ class Business: NSObject {
         } else {
             distance = nil
         }
-        
+
         let ratingImageURLString = dictonary["rating_img_url_large"] as? String
         if ratingImageURLString != nil {
             ratingImageURL = NSURL(string: ratingImageURLString!)
         }  else {
             ratingImageURL = nil
         }
-        
+
         reviewCount = dictonary["review_count"] as? NSNumber
-        
+
         let isClosed = dictonary["is_closed"] as? Bool
         if let isClosed =  isClosed {
             self.status = isClosed ? "Closed" : "Open"
         } else {
             self.status = "Open"
         }
-        
+
         let phone = dictonary["phone"] as? String
         var displayPhone = ""
         if let phone = phone {
@@ -122,9 +122,9 @@ class Business: NSObject {
             displayPhone = "N/A"
         }
         self.phone = displayPhone
-        
+
     }
-    
+
     class func businesses(array: [NSDictionary]) -> [Business] {
         var businesses = [Business]()
         for dictionary in array {
@@ -133,11 +133,11 @@ class Business: NSObject {
         }
         return businesses
     }
-    
+
     class func searchWithTerm(term: String?, completion: (Result!, NSError!) -> Void) {
         YelpClient.sharedInstance.searchWithTerm(term, completion: completion)
     }
-    
+
     class func searchWithTerm(term: String?, sort: Int?, categories: [String]?, deals: Bool?, radius: Float?, offset: Int?, completion: (Result!, NSError!) -> Void) -> Void {
         YelpClient.sharedInstance.searchWithTerm(term, sort: sort, categories: categories, deals: deals, radius: radius, offset: offset, completion: completion)
     }

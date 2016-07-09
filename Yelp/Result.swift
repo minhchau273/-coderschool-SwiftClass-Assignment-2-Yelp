@@ -11,7 +11,7 @@ import Foundation
 class Result: NSObject {
     let total: Int?
     let businesses: [Business]!
-    
+
     init(total: Int, businesses: [Business]!) {
         self.total = total
         self.businesses = businesses
