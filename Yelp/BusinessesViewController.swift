@@ -97,7 +97,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func addTableFooterView() {
         
         tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: CGRectGetWidth(tableView.superview!.frame), height: 50))
-        println("width: \(tableFooterView.frame.width)")
+        print("width: \(tableFooterView.frame.width)")
         loadingView = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         loadingView.startAnimating()
         loadingView.center = tableFooterView.center
@@ -191,7 +191,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         // Get filters from FiltersViewController
         var term: String?
-        if !searchBar.text.isEmpty {
+        if !searchBar.text!.isEmpty {
             term = searchBar.text
         }
         let sortValue = filters["sort"] as? Int
@@ -203,7 +203,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         }
         
         // Set filters in this view controller
-        self.filters["sort"] = NSNumber(unsignedInteger: sortValue!)
+        self.filters["sort"] = sortValue!
         self.filters["categories"] = categories
         self.filters["deal"] = deal
         self.filters["radius"] = radius
@@ -229,8 +229,9 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // MARK: Search bar
-    
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
         searchBar.resignFirstResponder()
     }
     
@@ -295,7 +296,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     func searchBusisness() {
         
         var term: String?
-        if !searchBar.text.isEmpty {
+        if !searchBar.text!.isEmpty {
             term = searchBar.text
         }
         
@@ -502,7 +503,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         else {
             UIGraphicsBeginImageContext(aView.frame.size)
         }
-        aView.layer.renderInContext(UIGraphicsGetCurrentContext())
+        aView.layer.renderInContext(UIGraphicsGetCurrentContext()!)
         var image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image

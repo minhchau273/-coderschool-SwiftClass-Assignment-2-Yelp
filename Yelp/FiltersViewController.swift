@@ -459,7 +459,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                     isSortCollapsed = true
                     break
                 case UIImage(named: "Circle")!:
-                    filters["sort"] = NSNumber(unsignedInteger: indexPath!.row)
+                    filters["sort"] = indexPath!.row
                     isSortCollapsed = true
                     break
                 default:

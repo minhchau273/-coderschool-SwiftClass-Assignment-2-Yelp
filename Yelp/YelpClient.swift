@@ -35,7 +35,7 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     }
     
     required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init(coder: aDecoder)!
     }
     
     init(consumerKey key: String!, consumerSecret secret: String!, accessToken: String!, accessSecret: String!) {
@@ -83,13 +83,13 @@ class YelpClient: BDBOAuth1RequestOperationManager {
             parameters["offset"] = offset!
         }
         
-        println(parameters)
+        print(parameters)
         
         return self.GET("search", parameters: parameters, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             var total = response["total"] as? Int
             var dictionaries = response["businesses"] as? [NSDictionary]
             if dictionaries != nil {
-                let result = Result(total: total!, businesses: Business.businesses(array: dictionaries!))
+                let result = Result(total: total!, businesses: Business.businesses(dictionaries!))
 //                completion(Business.businesses(array: dictionaries!), nil)
                 completion(result, nil)
             }

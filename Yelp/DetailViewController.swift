@@ -112,23 +112,26 @@ class DetailViewController: UIViewController {
         let url = NSURL(string: sUrl)
         
         let request = NSURLRequest(URL: url!)
-        
-        var data = NSURLConnection.sendSynchronousRequest(request, returningResponse: nil, error: nil)
-        let json = NSJSONSerialization.JSONObjectWithData(data!, options: nil, error: nil) as? NSDictionary
-        
-        if let json = json {
-            var stepArray = json.valueForKeyPath("routes.legs.steps") as! NSArray
-            var array = stepArray[0][0] as! [NSDictionary]
-            
-            // Add the 1st location (my location)
-            destLocationArray.append(myLocation)
-            for step in array {
-                var desLat = step.valueForKeyPath("end_location.lat") as! Double
-                var desLng = step.valueForKeyPath("end_location.lng") as! Double
-                self.destLocationArray.append(Location(lat: desLat, lng: desLng))
-                //println("lat: \(desLat), lng: \(desLng)")
+
+        do {
+            var data = try NSURLConnection.sendSynchronousRequest(request, returningResponse: nil)
+            let json = try NSJSONSerialization.JSONObjectWithData(data, options: []) as? NSDictionary
+
+            if let json = json {
+                var stepArray = json.valueForKeyPath("routes.legs.steps") as! NSArray
+                var array = stepArray[0][0] as! [NSDictionary]
+
+                // Add the 1st location (my location)
+                destLocationArray.append(myLocation)
+                for step in array {
+                    var desLat = step.valueForKeyPath("end_location.lat") as! Double
+                    var desLng = step.valueForKeyPath("end_location.lng") as! Double
+                    self.destLocationArray.append(Location(lat: desLat, lng: desLng))
+                    //println("lat: \(desLat), lng: \(desLng)")
+                }
             }
-        }
+
+        } catch  { }
     }
     
     func showDirection() {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftString
 
 class Business: NSObject {
     let name: String?
@@ -60,7 +61,7 @@ class Business: NSObject {
                     displayAddress = displayAddress + (s as! String) + ", "
                 }
                 // Remove ", " at the end
-                displayAddress = displayAddress[0..<(count(displayAddress) - 2)]
+                displayAddress = displayAddress[0..<(displayAddress.characters.count - 2)]
             }
             
             // Get latitude and longitude
@@ -111,7 +112,7 @@ class Business: NSObject {
         let phone = dictonary["phone"] as? String
         var displayPhone = ""
         if let phone = phone {
-            if count(phone) == 10 {
+            if phone.characters.count == 10 {
                 displayPhone = "(" + phone[0...2] + ") "
                 displayPhone += phone[3...5] + "-"
                 displayPhone += phone[6...9]
@@ -125,7 +126,7 @@ class Business: NSObject {
         
     }
     
-    class func businesses(#array: [NSDictionary]) -> [Business] {
+    class func businesses(array: [NSDictionary]) -> [Business] {
         var businesses = [Business]()
         for dictionary in array {
             var business = Business(dictonary: dictionary)
@@ -142,15 +143,4 @@ class Business: NSObject {
         YelpClient.sharedInstance.searchWithTerm(term, sort: sort, categories: categories, deals: deals, radius: radius, offset: offset, completion: completion)
     }
 
-}
-
-extension String {
-    subscript (r: Range<Int>) -> String {
-        get {
-            let startIndex = advance(self.startIndex, r.startIndex)
-            let endIndex = advance(startIndex, r.endIndex - r.startIndex)
-            
-            return self[Range(start: startIndex, end: endIndex)]
-        }
-    }
 }
