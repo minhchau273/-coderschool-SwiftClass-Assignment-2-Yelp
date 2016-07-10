@@ -3,10 +3,10 @@
 use_frameworks!
 
 target 'Yelp' do
-  pod 'AFNetworking'
-  pod 'BDBOAuth1Manager'
-  pod 'SevenSwitch'
+  pod 'AFNetworking', '~> 2.5.4'
+  pod 'BDBOAuth1Manager', '~> 1.5'
   pod 'GoogleMaps'
+  pod 'SwiftString', :git => 'git@github.com:amayne/SwiftString.git'
 end
 
 target 'YelpTests' do

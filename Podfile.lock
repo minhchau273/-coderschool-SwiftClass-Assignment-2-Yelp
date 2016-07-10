@@ -24,18 +24,29 @@ PODS:
     - AFNetworking/NSURLConnection (~> 2.5.0)
     - AFNetworking/NSURLSession (~> 2.5.0)
   - GoogleMaps (1.10.2)
-  - SevenSwitch (2.0.0)
+  - SwiftString (0.5.1)
 
 DEPENDENCIES:
-  - AFNetworking
-  - BDBOAuth1Manager
+  - AFNetworking (~> 2.5.4)
+  - BDBOAuth1Manager (~> 1.5)
   - GoogleMaps
-  - SevenSwitch
+  - SwiftString (from `git@github.com:amayne/SwiftString.git`)
+
+EXTERNAL SOURCES:
+  SwiftString:
+    :git: git@github.com:amayne/SwiftString.git
+
+CHECKOUT OPTIONS:
+  SwiftString:
+    :commit: 3ac8ced3b3484d36fc900a3e13778d58e082d42d
+    :git: git@github.com:amayne/SwiftString.git
 
 SPEC CHECKSUMS:
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   BDBOAuth1Manager: 2e28773b58f880fb36b5cd3efcf0b1fefbc78a99
   GoogleMaps: 5c92e599b07b0a2a9b367c5dd128edc629bddfea
-  SevenSwitch: 4ae92ffcad0ef93b38553b39a25e753c94eb7847
+  SwiftString: 55c189fc54f3f5e3030a355155be47c41852bcc6
 
-COCOAPODS: 0.38.2
+PODFILE CHECKSUM: 38031a1a279f796762d55c095a12ba7e9d3ff20d
+
+COCOAPODS: 1.0.0

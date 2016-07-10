@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  Yelp
 //
-//  Created by Dave Vo on 9/2/15.
+//  Created by Chau Vo on 9/2/15.
 //  Copyright (c) 2015 Chau Vo. All rights reserved.
 //
 
@@ -15,24 +15,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     let googleMapsApiKey = "AIzaSyCcmXpUGtrnxWA4p6vd6UAMsCm4J58BpHI"
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+
         // Config apprearance
         UINavigationBar.appearance().barTintColor = UIColor(red: 213/255, green: 28/255, blue: 24/255, alpha: 1.0)
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
-        
+
         UIApplication.sharedApplication().statusBarStyle = .LightContent
-        
+
         // Clear old filters
         NSUserDefaults.standardUserDefaults().removeObjectForKey("filters")
         NSUserDefaults.standardUserDefaults().removeObjectForKey("switchStates")
-        
+
         // Google Map
         GMSServices.provideAPIKey(googleMapsApiKey)
-        
+
         return true
     }
 
@@ -58,6 +57,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
 }
-
