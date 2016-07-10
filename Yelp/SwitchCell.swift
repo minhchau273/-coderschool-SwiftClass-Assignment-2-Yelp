@@ -31,7 +31,6 @@ class SwitchCell: UITableViewCell {
         switchView.addSubview(onSwitch)
 
         onSwitch.addTarget(self, action: #selector(SwitchCell.switchValueChanged), forControlEvents: UIControlEvents.ValueChanged)
-      
     }
 
     func switchValueChanged() {

@@ -112,9 +112,9 @@ class Business: NSObject {
         var displayPhone = ""
         if let phone = phone {
             if phone.characters.count == 10 {
-                displayPhone = "(" + phone[0...2] + ") "
-                displayPhone += phone[3...5] + "-"
-                displayPhone += phone[6...9]
+                displayPhone = "(" + phone.substring(0, length: 3) + ") "
+                displayPhone += phone.substring(3, length: 3) + "-"
+                displayPhone += phone.substring(6, length: 4)
             } else {
                 displayPhone = phone
             }

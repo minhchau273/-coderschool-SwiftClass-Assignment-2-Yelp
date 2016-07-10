@@ -337,7 +337,7 @@ extension FiltersViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             break
         }
-        
+
         return 35.0
     }
 
@@ -374,6 +374,7 @@ extension FiltersViewController: SwitchCellDelegate, DropDownCellDelegate {
                 default:
                     break
                 }
+                tableView.reloadSections(NSIndexSet(index: 1), withRowAnimation: UITableViewRowAnimation.Automatic)
             } else if indexPath!.section == 2 {
                 // Sort area
                 switch currentImg {
@@ -387,6 +388,7 @@ extension FiltersViewController: SwitchCellDelegate, DropDownCellDelegate {
                 default:
                     break
                 }
+                tableView.reloadSections(NSIndexSet(index: 2), withRowAnimation: UITableViewRowAnimation.Automatic)
             }
         }
     }
@@ -424,7 +426,7 @@ extension FiltersViewController {
 
         let filtersData = NSKeyedArchiver.archivedDataWithRootObject(filters)
         self.defaults.setObject(filtersData, forKey: "filters")
-        
+
         defaults.synchronize()
     }
 

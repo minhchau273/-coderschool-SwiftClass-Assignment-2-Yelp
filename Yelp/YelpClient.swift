@@ -11,8 +11,8 @@ import BDBOAuth1Manager
 
 let yelpConsumerKey = "5PEogcKnmorm48om9FHlTw"
 let yelpConsumerSecret = "mTPPMC3KoGdbllzxP7nWcTiR2IQ"
-let yelpToken = "Y1y7BQHc_8h9lI7qtEIIHyT8ZGnxf4JR"
-let yelpTokenSecret = "wwdiV0wZ98U4wSKgQcm89Mj0ljs"
+let yelpToken = "dFSVGMT_cYWdFuK5mKx_xghytPGBhpXO"
+let yelpTokenSecret = "YurwpllhD20nE5bpwumu3CX4itA"
 
 enum YelpSortMode: Int {
     case BestMatched = 0, Distance, HighestRated
