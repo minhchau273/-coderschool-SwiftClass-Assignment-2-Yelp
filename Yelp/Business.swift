@@ -127,7 +127,7 @@ class Business: NSObject {
     class func businesses(array: [NSDictionary]) -> [Business] {
         var businesses = [Business]()
         for dictionary in array {
-            var business = Business(dictonary: dictionary)
+            let business = Business(dictonary: dictionary)
             businesses.append(business)
         }
         return businesses

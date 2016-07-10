@@ -42,7 +42,7 @@ class YelpClient: BDBOAuth1RequestOperationManager {
     init(consumerKey key: String!, consumerSecret secret: String!, accessToken: String!, accessSecret: String!) {
         self.accessToken = accessToken
         self.accessSecret = accessSecret
-        var baseUrl = NSURL(string: "http://api.yelp.com/v2/")
+        let baseUrl = NSURL(string: "http://api.yelp.com/v2/")
         super.init(baseURL: baseUrl, consumerKey: key, consumerSecret: secret)
 
         let token = BDBOAuth1Credential(token: accessToken, secret: accessSecret, expiration: nil)
@@ -86,8 +86,8 @@ class YelpClient: BDBOAuth1RequestOperationManager {
         print(parameters)
 
         return self.GET("search", parameters: parameters, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-            var total = response["total"] as? Int
-            var dictionaries = response["businesses"] as? [NSDictionary]
+            let total = response["total"] as? Int
+            let dictionaries = response["businesses"] as? [NSDictionary]
             if dictionaries != nil {
                 let result = Result(total: total!, businesses: Business.businesses(dictionaries!))
                 completion(result, nil)

@@ -122,8 +122,8 @@ extension DetailViewController {
                 // Add the 1st location (my location)
                 destLocationArray.append(myLocation)
                 for step in array {
-                    var desLat = step.valueForKeyPath("end_location.lat") as! Double
-                    var desLng = step.valueForKeyPath("end_location.lng") as! Double
+                    let desLat = step.valueForKeyPath("end_location.lat") as! Double
+                    let desLng = step.valueForKeyPath("end_location.lng") as! Double
                     self.destLocationArray.append(Location(lat: desLat, lng: desLng))
                     //println("lat: \(desLat), lng: \(desLng)")
                 }
